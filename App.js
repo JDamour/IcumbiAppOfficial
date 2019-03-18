@@ -47,7 +47,6 @@ export default class App extends React.Component {
           <StatusBar backgroundColor="#1c313a" barStyle="light-content" />
           <Routes />
           <AppLoading />
-  
         </View>
       );
     } else {
