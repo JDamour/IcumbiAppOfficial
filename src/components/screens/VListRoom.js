@@ -142,7 +142,7 @@ export default class VListLanding extends Component {
     };
   }
   selectRooms() {
-    Actions.selectRooms();
+    Actions.landingScreen();
   }
   render() {
     return (

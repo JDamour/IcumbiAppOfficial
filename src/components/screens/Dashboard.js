@@ -22,10 +22,12 @@ import {
     Icon  
 } from 'native-base';
 import BodyLanding from './BodyLanding';
-
 export default class Dashboard extends Component{
     landingScreen(){
         Actions.landingScreen();
+    }
+    selectRooms(){
+        Actions.selectRooms();
     }
     render(){
         const clusterFor=["Boys","Girls","Family"];
@@ -85,7 +87,7 @@ export default class Dashboard extends Component{
                     <FooterTab>
                         <Button full style={styles.ButtomCont}>
                         <View>
-                            <TouchableOpacity onPress={this.landingScreen}>
+                            <TouchableOpacity onPress={this.selectRooms}>
                             <Text style={styles.applyButton}>Apply</Text>
                             </TouchableOpacity>
                         </View>
