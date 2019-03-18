@@ -19,16 +19,16 @@ export default class App extends React.Component {
   _onSkip = () => {
     this.setState({ showRealApp: true });
   };
- async componentWillMount() {
+  async componentWillMount() {
     try {
       await Font.loadAsync({
         Roboto: require("native-base/Fonts/Roboto.ttf"),
         Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-        Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf"),
+        Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
       });
       //this.setState({ showRealApp: true });
     } catch (error) {
-      console.log('error loading icon fonts', error);
+      console.log("error loading icon fonts", error);
     }
   }
 
@@ -47,7 +47,6 @@ export default class App extends React.Component {
           <StatusBar backgroundColor="#1c313a" barStyle="light-content" />
           <Routes />
           <AppLoading />
-  
         </View>
       );
     } else {
