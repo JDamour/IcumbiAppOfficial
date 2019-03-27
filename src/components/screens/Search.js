@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Text, StyleSheet, View, TextInput } from "react-native";
 
 export default class Search extends Component {
+  searchInput = text => {
+    this.setState({ input: text });
+  };
   render() {
     return (
       <View style={styles.inputBoxBlock}>
@@ -11,6 +14,7 @@ export default class Search extends Component {
           placeholder="Search"
           placeholderTextColor="#333"
           selectionColor="#fff"
+          onChangeText={this.searchInput}
         />
       </View>
     );
