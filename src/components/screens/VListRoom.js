@@ -31,6 +31,7 @@ export default class VListLanding extends Component {
     };
   }
 
+
   async componentDidMount() {
     this.timer = setInterval(() => this.getHouses(), 1000);
   }
@@ -58,6 +59,9 @@ export default class VListLanding extends Component {
       .catch(error => {
         console.log(error);
       });
+
+  selectRooms() {
+    Actions.landingScreen();
   }
 
   render() {

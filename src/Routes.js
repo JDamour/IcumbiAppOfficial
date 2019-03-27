@@ -15,6 +15,8 @@ export default class Routes extends Component {
     return (
       <Router>
         <Stack key="root" hideNavBar={true}>
+        
+          <Scene key="dashboard" component={Dashboard} title="Dashboard" />
           <Scene
             key="dashboard"
             component={Dashboard}
@@ -26,11 +28,7 @@ export default class Routes extends Component {
             component={LandingScreen}
             title="LandingScreen"
           />
-          <Scene
-            key="selectRooms"
-            component={SelectRooms}
-            title="SelectRooms"
-          />
+          
           <Scene key="clusterMap" component={ClusterMap} title="clusterMap" />
           <Scene
             key="searchFilter"
@@ -40,6 +38,7 @@ export default class Routes extends Component {
           <Scene key="signin" component={Signin} title="Signin" />
           <Scene key="signup" component={Signup} title="Register" />
           <Scene key="forgot" component={Forgot} title="Forgot Password" />
+
         </Stack>
       </Router>
     );
