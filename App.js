@@ -1,16 +1,21 @@
 import React from "react";
-import { StyleSheet, View, StatusBar } from "react-native";
+import {
+  StyleSheet,
+  View,
+  StatusBar,
+  AsyncStorage,
+} from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import Routes from "./src/Routes";
-// { Font, AppLoading } from "expo";
-
 import { Root } from "native-base";
 import { Font, AppLoading } from "expo";
+const ACCESS_TOKEN = 'access_token';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showRealApp: false
+      showRealApp: false,
+      isLoggenIn: false,
     };
   }
   _onDone = () => {
@@ -19,7 +24,7 @@ export default class App extends React.Component {
   _onSkip = () => {
     this.setState({ showRealApp: true });
   };
- async componentWillMount() {
+  async componentWillMount() {
     try {
       await Font.loadAsync({
         Roboto: require("native-base/Fonts/Roboto.ttf"),
@@ -27,8 +32,24 @@ export default class App extends React.Component {
         Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf"),
       });
       //this.setState({ showRealApp: true });
+      this.getToken();
     } catch (error) {
       console.log('error loading icon fonts', error);
+    }
+  }
+  async getToken() {
+    try {
+      let accessToken = await AsyncStorage.getItem(ACCESS_TOKEN);
+      if (!accessToken) {
+        console.log("Token not set");
+      } else {
+        // this.verifyToken(accessToken)
+        console.log("Here we are");
+        console.log(accessToken);
+        this.setState({ isLoggenIn: true });
+      }
+    } catch (error) {
+      console.log("Something went wrong");
     }
   }
 
@@ -47,19 +68,23 @@ export default class App extends React.Component {
           <StatusBar backgroundColor="#1c313a" barStyle="light-content" />
           <Routes />
           <AppLoading />
-  
         </View>
       );
     } else {
-      return (
-        <AppIntroSlider
-          textStyle={styles.textStyle}
-          slides={slides}
-          onDone={this._onDone}
-          showSkipButton={true}
-          onSkip={this._onSkip}
-        />
-      );
+      if (!this.state.isLoggenIn) {
+        return (
+          <AppIntroSlider
+            textStyle={styles.textStyle}
+            slides={slides}
+            onDone={this._onDone}
+            showSkipButton={true}
+            onSkip={this._onSkip}
+          />);
+      } else {
+        return (
+          <Routes />
+        );
+      }
     }
   }
 }

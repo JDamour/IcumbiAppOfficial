@@ -4,11 +4,13 @@ import {
     Text,
     View,
     TextInput,
-    TouchableOpacity
+    TouchableOpacity,
+    AsyncStorage,
+    TouchableHighlight
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-//import { Input } from 'native-base';
-
+const ACCESS_TOKEN = 'access_token';
+const EMAIL_TOKEN = 'email_token';
 export default class FormSignIn extends Component {
     dashboard() {
         Actions.dashboard();
@@ -16,10 +18,104 @@ export default class FormSignIn extends Component {
     forgot() {
         Actions.forgot();
     }
+    constructor() {
+        super();
+
+        this.state = {
+            email: "",
+            password: "",
+            error: "",
+            showProgress: false,
+            emailToken: "",
+        }
+        this.onLoginPressed = this.onLoginPressed.bind(this);
+    }
+    componentWillMount() {
+        this.getEmailToken();
+    }
+    async getEmailToken() {
+        try {
+            let emailToken = await AsyncStorage.getItem(EMAIL_TOKEN);
+            if (!emailToken) {
+                //this.redirect('login');
+            } else {
+                this.setState({ emailToken: emailToken })
+            }
+        } catch (error) {
+            console.log("Something went wrong");
+            //this.redirect('login');
+        }
+    }
+    storeToken(responseData) {
+        AsyncStorage.setItem(ACCESS_TOKEN, responseData, (err) => {
+            if (err) {
+                console.log("an error");
+                throw err;
+            }
+            console.log("success");
+        }).catch((err) => {
+            console.log("error is: " + err);
+        });
+    }
+    storeEmailToken(responseData) {
+        AsyncStorage.setItem(EMAIL_TOKEN, responseData, (err) => {
+            if (err) {
+                console.log("an error");
+                throw err;
+            }
+            console.log("email stored success");
+        }).catch((err) => {
+            console.log("error is: " + err);
+        });
+    }
+    async onLoginPressed() {
+        const { email, password } = this.state;
+        this.setState({ error: '', showProgress: true });
+        try {
+            fetch('http://icumbi.tres.rw/api/login', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "email": email,
+                    "password": password,
+                }),
+            })
+                .then((response) => response.json())
+                .then((responseData) => {
+                    "POST Response",
+                        "Response Body -> " + JSON.stringify(responseData),
+                        console.log(responseData);
+                    // deviceStorage.saveKey('id_token',responseData.success.token);
+                    // this.props.newJWT(responseData.success.token);
+                    //  this.onRegistrationSucceed(responseData);
+                    let accessToken = responseData.success.token;
+                    
+                    console.log(accessToken);
+                    this.storeToken(accessToken);
+                    this.storeEmailToken(email);
+                    Actions.landingScreen();
+                })
+
+                .catch((error) => {
+                    console.log(error);
+                    // this.onRegistrationFail();
+                })
+        } catch (error) {
+            this.setState({ error: error });
+            console.log("error " + error);
+            this.setState({ showProgress: false });
+        }
+
+    };
 
     render() {
+        const { email, password } = this.state;
         return (
             <View style={styles.container}>
+                <Text style={styles.title}> Your email :{this.state.emailToken}  </Text>
                 <TextInput
                     style={styles.inputBox}
                     underlineColorAndroid="rgba(0,0,0,0)"
@@ -28,6 +124,8 @@ export default class FormSignIn extends Component {
                     selectionColor="#fff"
                     keyboardType="email-address"
                     onSubmitEditing={() => this.password.focus()}
+                    value={email}
+                    onChangeText={email => this.setState({ email })}
                 />
                 <TextInput
                     style={styles.inputBox}
@@ -36,18 +134,19 @@ export default class FormSignIn extends Component {
                     selectionColor="#fff"
                     secureTextEntry={true}
                     placeholderTextColor="#333"
-                    ref={input => (this.password = input)}
+                    value={password}
+                    onChangeText={password => this.setState({ password })}
                 />
                 <TouchableOpacity onPress={this.forgot}>
                     <Text style={{ marginRight: 10 }} style={styles.signupButton}>
                         Forgot
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text onPress={this.dashboard} style={styles.buttonText}>
+                <TouchableHighlight style={styles.button} onPress={this.onLoginPressed} >
+                    <Text style={styles.buttonText}>
                         {this.props.type}
                     </Text>
-                </TouchableOpacity>
+                </TouchableHighlight>
             </View>
         );
     }
@@ -88,6 +187,18 @@ const styles = StyleSheet.create({
         color: "#000",
         fontSize: 16,
         fontWeight: "500"
-    }
+    },
+    title: {
+        fontSize: 15,
+        marginRight: 40,
+        fontWeight: "500",
+        color: "#333",
+    },
+   
+    heading: {
+        fontSize: 30,
+        fontWeight: "500",
+        color: "#fff",
+    },
 });
 
