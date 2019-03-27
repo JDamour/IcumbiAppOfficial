@@ -18,9 +18,10 @@ export default class Routes extends Component {
         
           <Scene key="dashboard" component={Dashboard} title="Dashboard" />
           <Scene
-            key="selectRooms"
-            component={SelectRooms}
-            title="SelectRooms"
+            key="dashboard"
+            component={Dashboard}
+            title="Dashboard"
+            initial={true}
           />
           <Scene
             key="landingScreen"
@@ -34,11 +35,10 @@ export default class Routes extends Component {
             component={SearchFilter}
             title="searchFilter"
           />
-          <Scene
-            key="signin"
-            component={Signin}
-            title="Signin"
-          />
+          <Scene key="signin" component={Signin} title="Signin" />
+          <Scene key="signup" component={Signup} title="Register" />
+          <Scene key="forgot" component={Forgot} title="Forgot Password" />
+
         </Stack>
       </Router>
     );

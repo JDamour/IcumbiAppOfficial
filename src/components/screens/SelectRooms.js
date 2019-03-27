@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Text, StyleSheet, View } from "react-native";
-import SelectRoomsHeader from "./SelectRoomHeader";
+import HeaderBar from "./HeaderBar";
 import VListRoom from "./VListRoom";
 import Search from "./Search";
 import { Actions } from "react-native-router-flux";
@@ -12,7 +12,7 @@ export default class SelectRooms extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <SelectRoomsHeader />
+        <HeaderBar />
         <Search />
         <VListRoom />
       </View>
