@@ -23,13 +23,20 @@ export default class HListLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Housedata: this.props.todo
+      Housedata: {}
     };
   }
   selectRooms() {
     Actions.selectRooms();
   }
   render() {
+    var objCopy = {};
+    let key;
+
+    for (key in this.props.todo) {
+      objCopy[key] = this.props.todo[key];
+    }
+    this.setState({ Housedata: objCopy });
     return (
       <View style={styles.container}>
         <FlatList

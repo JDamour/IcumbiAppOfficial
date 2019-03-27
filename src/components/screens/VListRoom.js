@@ -27,7 +27,7 @@ export default class VListLanding extends Component {
     super(props);
     this.state = {
       data: this.data,
-      houses: [],
+      houses: []
     };
   }
 

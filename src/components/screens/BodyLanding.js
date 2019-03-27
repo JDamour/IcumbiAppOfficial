@@ -81,7 +81,7 @@ export default class BodyLanding extends Component {
             <Icon
               onPress={this.goBack}
               style={styles.iconStyles}
-              name="ios-arrow-back"
+              name="ios-locate"
               size={18}
               color="#000"
             />
@@ -92,7 +92,7 @@ export default class BodyLanding extends Component {
           <View>
             <Text style={styles.titleSecond}> House details</Text>
           </View>
-          <HListLanding todo={todo} />
+          {/* <HListLanding todo={todo} /> */}
         </View>
 
         <Card>
