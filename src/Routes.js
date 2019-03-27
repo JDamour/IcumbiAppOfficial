@@ -16,14 +16,11 @@ export default class Routes extends Component {
       <Router>
         <Stack key="root" hideNavBar={true}>
           <Scene
-            key="signin"
-            component={Signin}
-            title="Signin"
+            key="dashboard"
+            component={Dashboard}
+            title="Dashboard"
             initial={true}
           />
-          <Scene key="signup" component={Signup} title="Register" />
-          <Scene key="forgot" component={Forgot} title="Forgot Password" />
-          <Scene key="dashboard" component={Dashboard} title="Dashboard" />
           <Scene
             key="landingScreen"
             component={LandingScreen}
@@ -40,6 +37,9 @@ export default class Routes extends Component {
             component={SearchFilter}
             title="searchFilter"
           />
+          <Scene key="signin" component={Signin} title="Signin" />
+          <Scene key="signup" component={Signup} title="Register" />
+          <Scene key="forgot" component={Forgot} title="Forgot Password" />
         </Stack>
       </Router>
     );
