@@ -3,6 +3,7 @@ import { Router, Stack, Scene } from "react-native-router-flux";
 
 import Signin from "./components/auth/auth-pages/Signin";
 import Signup from "./components/auth/auth-pages//Signup";
+import Districts from "./components/Districts";
 import Forgot from "./components/auth/auth-pages//Forgot";
 import Dashboard from "./components/screens/Dashboard";
 import LandingScreen from "./components/screens/LandingScreen";
@@ -38,6 +39,11 @@ export default class Routes extends Component {
             key="signin"
             component={Signin}
             title="Signin"
+          />
+          <Scene
+            key="districts"
+            component={Districts}
+            title="Districts"
           />
         </Stack>
       </Router>
