@@ -23,149 +23,76 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import BodyLanding from "./BodyLanding";
 
 export default class VListLanding extends Component {
-  data = [
-    {
-      imageUrl: require("../../assets/images/room1.jpeg"),
-      title: "Available Rooms (Shared Room)",
-      title2: "EXPLORE HOMES",
-      likeCount: "12",
-      comments: "4",
-      time: "11h ago",
-      price: "6000",
-      place: "Whitefield",
-      bhk: 3
-    },
-    {
-      imageUrl: require("../../assets/images/room2.jpeg"),
-      title: "Available Rooms (Shared Room)",
-      title2: "EXPLORE HOMES",
-      likeCount: "59",
-      comments: "12",
-      time: "1 Days ago",
-      price: "9000",
-      place: "Whitefield",
-      bhk: 3
-    },
-    {
-      imageUrl: require("../../assets/images/room3.jpeg"),
-      title: "Available Rooms (Private Room)",
-      title2: "EXPLORE HOMES",
-      likeCount: "102",
-      comments: "102",
-      time: "2 Week ago",
-      price: "12000",
-      place: "Hoodi",
-      bhk: 4
-    },
-    {
-      imageUrl: require("../../assets/images/room4.jpeg"),
-      title: "Available Rooms (Private Room)",
-      title2: "EXPLORE HOMES",
-      likeCount: "83",
-      comments: "102",
-      time: "2 Week ago",
-      price: "50000",
-      place: "Phoinex market city",
-      bhk: 5
-    },
-    {
-      imageUrl: require("../../assets/images/room5.jpeg"),
-      title: "Available Rooms (Full House)",
-      title2: "EXPLORE HOMES",
-      likeCount: "84",
-      comments: "102",
-      time: "2 Week ago",
-      price: "45000",
-      place: "jay Nagar",
-      bhk: 2
-    },
-    {
-      imageUrl: require("../../assets/images/room6.jpeg"),
-      title: "Available Rooms (Private Room)",
-      title2: "EXPLORE HOMES",
-      likeCount: "98",
-      comments: "102",
-      time: "2 Week ago",
-      price: "7000",
-      place: "jay Nagar",
-      bhk: 2
-    },
-    {
-      imageUrl: require("../../assets/images/room7.jpeg"),
-      title: "Available Rooms (Full House)",
-      title2: "EXPLORE HOMES",
-      likeCount: "2038",
-      comments: "102",
-      time: "2 Week ago",
-      price: "7000",
-      place: "jay Nagar",
-      bhk: 4
-    },
-    {
-      imageUrl: require("../../assets/images/room8.jpeg"),
-      title: "Available Rooms (Full House)",
-      title2: "EXPLORE HOMES",
-      likeCount: "1003",
-      comments: "102",
-      time: "2 Week ago",
-      price: "7000",
-      place: "jay Nagar",
-      bhk: 2
-    },
-    {
-      imageUrl: require("../../assets/images/room9.jpeg"),
-      title: "Available Rooms (Shared Room)",
-      title2: "EXPLORE HOMES",
-      likeCount: "3032",
-      comments: "102",
-      time: "2 Week ago",
-      price: "7000",
-      place: "jay Nagar",
-      bhk: 4
-    },
-    {
-      imageUrl: require("../../assets/images/room10.jpeg"),
-      title: "Available Rooms (Private Room)",
-      title2: "EXPLORE HOMES",
-      likeCount: "430",
-      comments: "102",
-      time: "2 Week ago",
-      price: "1300",
-      place: "ram murthi nagar",
-      bhk: 1
-    }
-  ];
   constructor(props) {
     super(props);
     this.state = {
-      data: this.data
+      data: this.data,
+      houses: [],
     };
   }
+
+
+  async componentDidMount() {
+    this.timer = setInterval(() => this.getHouses(), 1000);
+  }
+
+  async getHouses() {
+    return fetch("http://icumbi.tres.rw/api/houses/list", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        page: 1,
+        size: 5
+      })
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        "POST Response",
+          "Response Body -> " + JSON.stringify(responseJson),
+          this.setState({
+            houses: responseJson.data
+          });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
   selectRooms() {
     Actions.landingScreen();
   }
+
   render() {
     return (
       <View style={styles.container}>
         <FlatList
-          data={this.state.data}
+          data={this.state.houses}
           renderItem={({ item: rowData }) => {
             return (
-              <Card title={null} image={{ url: rowData.imageUrl }}>
+              <Card title={null} image={{ uri: rowData.photos[0].source }}>
                 <CardItem>
                   <Left>
-                    <Thumbnail source={rowData.imageUrl} {...this.props} />
+                    <Thumbnail
+                      source={{ uri: rowData.photos[0].source }}
+                      {...this.props}
+                    />
                     <Body>
-                      <Text style={styles.titleSecond}>{rowData.title}</Text>
-                      <Text style={styles.subTitle}>{rowData.title2}</Text>
+                      <Text style={styles.titleSecond}>Available rooms</Text>
+                      <Text style={styles.subTitle}>EXPLORE HOMES</Text>
                     </Body>
                   </Left>
                 </CardItem>
-                <TouchableOpacity onPress={this.selectRooms}>
+                <TouchableOpacity
+                  onPress={() => {
+                    Actions.landingScreen({ id: rowData.id });
+                  }}
+                >
                   <CardItem cardBody>
                     <Image
                       style={{ height: 150, width: null, flex: 1 }}
-                      source={rowData.imageUrl}
+                      source={{ uri: rowData.photos[0].source }}
                       {...this.props}
                     />
                   </CardItem>
@@ -174,8 +101,8 @@ export default class VListLanding extends Component {
                 <CardItem>
                   <Left>
                     <Body>
-                      <Text style={styles.place}>{rowData.place}</Text>
-                      <Text style={styles.bhk}> {rowData.bhk} BHK </Text>
+                      <Text style={styles.place}>{rowData.district}</Text>
+                      <Text style={styles.bhk}> {rowData.rooms} Rooms </Text>
                     </Body>
                   </Left>
                 </CardItem>
@@ -183,23 +110,23 @@ export default class VListLanding extends Component {
                   <Left>
                     <Button transparent>
                       <Icon active name="thumbs-up" />
-                      <Text>{rowData.likeCount} Likes</Text>
+                      <Text>{rowData.views} Views</Text>
                     </Button>
                   </Left>
                   <Body>
                     <Button transparent>
                       <Icon active name="chatbubbles" />
-                      <Text>{rowData.comments} Comments</Text>
+                      <Text>1 Comments</Text>
                     </Button>
                   </Body>
                   <Right>
-                    <Text>{rowData.time}</Text>
+                    <Text>1 Week ago</Text>
                   </Right>
                 </CardItem>
               </Card>
             );
           }}
-          keyExtractor={item => item.likeCount}
+          keyExtractor={item => item.id.toString()}
         />
       </View>
     );
