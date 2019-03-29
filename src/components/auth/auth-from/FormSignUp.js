@@ -199,19 +199,20 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        marginTop:50,
+
     },
 
     inputBox: {
         width: 300,
         backgroundColor: "rgba(255, 255,255,0.2)",
         borderRadius: 25,
-        paddingHorizontal: 16,
-        paddingVertical: 13,
-
+        paddingHorizontal: 14,
+        paddingVertical: 7,
         fontSize: 16,
         color: "#ffffff",
-        marginVertical: 10
+        marginVertical: 8
     },
     button: {
         width: 300,
