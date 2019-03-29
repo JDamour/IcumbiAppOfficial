@@ -59,7 +59,7 @@ export default class VListLanding extends Component {
       .catch(error => {
         console.log(error);
       });
-
+    }
   selectRooms() {
     Actions.landingScreen();
   }
