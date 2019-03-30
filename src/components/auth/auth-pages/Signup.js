@@ -17,7 +17,6 @@ export default class Signup extends Component{
 render(){
     return(
 <View style={styles.container}>
-<Logo/>
 <FormSignUp type="Signup"/>
 <View style={styles.signupTextCont}>
 <Text style={styles.signupText}>Already have an account?</Text>
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
       backgroundColor: "#20d2bb",
       flex: 1,
       alignItems: "center",
-      justifyContent: "center"
+      justifyContent: "center",
     },
     signupTextCont: {
       flexGrow: 1,
@@ -45,12 +44,15 @@ const styles = StyleSheet.create({
     },
     signupText: {
       color: "rgba(0,0,0,0.6)",
-      fontSize: 16
+      fontSize: 16,
+      marginBottom:15
+
     },
     signupButton: {
       color: "#000",
       fontSize: 16,
-      fontWeight: "500"
+      fontWeight: "500",
+      marginBottom:15
     }
   });
   

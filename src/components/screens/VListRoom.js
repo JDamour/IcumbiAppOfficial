@@ -27,7 +27,8 @@ export default class VListLanding extends Component {
     super(props);
     this.state = {
       data: this.data,
-      houses: []
+      houses: [],
+      id: this.props.id
     };
   }
 
@@ -44,7 +45,8 @@ export default class VListLanding extends Component {
       },
       body: JSON.stringify({
         page: 1,
-        size: 5
+        size: 5,
+        district: this.state.id
       })
     })
       .then(response => response.json())

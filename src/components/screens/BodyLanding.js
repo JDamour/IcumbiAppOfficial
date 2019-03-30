@@ -32,7 +32,7 @@ export default class BodyLanding extends Component {
     fetch(`http://icumbi.tres.rw/api/houses/show/${this.state.hid}`)
       .then(response => response.json())
       .then(responseJson => {
-        var objCopy = {}; // objCopy will store a copy of the mainObj
+        var objCopy = {}; // objCopy will store a copy of the mainOb
         let key;
 
         for (key in responseJson) {
