@@ -10,11 +10,12 @@ export default class SelectRooms extends Component {
     Actions.deshboard();
   }
   render() {
+    const id = this.props.id;
     return (
       <View style={styles.container}>
         <HeaderBar />
         <Search />
-        <VListRoom />
+        <VListRoom id={id} />
       </View>
     );
   }

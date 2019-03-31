@@ -12,7 +12,7 @@ export default class LandingScreen extends Component {
       <Container style={styles.containerBg}>
         <SelectRoomsHeader />
         <BodyLanding id={id} />
-        <FooterBar />
+        {/* <FooterBar /> */}
       </Container>
     );
   }

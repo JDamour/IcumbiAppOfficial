@@ -28,9 +28,9 @@ export default class VListLanding extends Component {
     this.state = {
       data: this.data,
       houses: [],
+      id: this.props.id
     };
   }
-
 
   async componentDidMount() {
     this.timer = setInterval(() => this.getHouses(), 1000);
@@ -45,7 +45,8 @@ export default class VListLanding extends Component {
       },
       body: JSON.stringify({
         page: 1,
-        size: 5
+        size: 5,
+        district: this.state.id
       })
     })
       .then(response => response.json())
@@ -59,9 +60,6 @@ export default class VListLanding extends Component {
       .catch(error => {
         console.log(error);
       });
-    }
-  selectRooms() {
-    Actions.landingScreen();
   }
 
   render() {
