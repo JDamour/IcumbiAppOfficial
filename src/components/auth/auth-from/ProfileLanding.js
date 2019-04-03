@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Container, Header } from "native-base";
 import { StyleSheet,Text,AsyncStorage} from "react-native";
-import SelectRoomsHeader from "./SelectRoomHeader";
-import BodyLanding from "./BodyLanding";
-import FooterBar from "./FooterBar";
+import SelectRoomsHeader from "../../screens/SelectRoomHeader";
+import FormProfile from './FormProfile';
+import ProfileFooterBar from "../../screens/ProfileFooterBar";
 const ACCESS_TOKEN = 'access_token';
 export default class LandingScreen extends Component {
   constructor(props) {
@@ -37,18 +37,11 @@ export default class LandingScreen extends Component {
     }
   }
   render() {
-    const id = this.props.id;
     return (
       <Container style={styles.containerBg}>
         <SelectRoomsHeader />
-
-        <BodyLanding id={id}/>
-        {this.state.isLoggenIn?
-        <FooterBar />
-        :
-        <Text></Text>
-        }
-
+        <FormProfile/>
+        <ProfileFooterBar/>
       </Container>
     );
   }

@@ -24,7 +24,7 @@ import {
                      </Button>
                  </Left>
                  <Body>
-                     <Title style={styles.titleMain}>Home</Title>
+                     <Title style={styles.titleMain}>Houses</Title>
                  </Body>
                  <Right>
                      <Button transparent>

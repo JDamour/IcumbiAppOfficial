@@ -10,7 +10,11 @@ import LandingScreen from "./components/screens/LandingScreen";
 import SelectRooms from "./components/screens/SelectRooms";
 import ClusterMap from "./components/screens/ClusterMap";
 import SearchFilter from "./components/screens/SearchFilter";
-
+import DetailsLanding from "./components/screens/DetailsLanding";
+import ProfileLanding from "./components/auth/auth-from/ProfileLanding";
+import AppStartUp from './AppStartUp';
+import ResetPassword from "./components/auth/auth-pages//ResetPassword";
+import HouseBookedListLanding from "./components/screens/HouseBookedLanding";
 export default class Routes extends Component {
   render() {
     return (
@@ -47,6 +51,31 @@ export default class Routes extends Component {
           />
           <Scene key="signup" component={Signup} title="Register" />
           <Scene key="forgot" component={Forgot} title="Forgot Password" />
+          <Scene
+            key="detailsLanding"
+            component={DetailsLanding}
+            title="Housedetails"
+          />
+          <Scene
+            key="profile"
+            component={ProfileLanding}
+            title="Profile"
+          />
+           <Scene
+            key="startup"
+            component={AppStartUp}
+            title="AppRoutes"
+          />
+          <Scene
+            key="resetpswd"
+            component={ResetPassword}
+            title="resetpswd"
+          />
+          <Scene
+            key="showBookedHouse"
+            component={HouseBookedListLanding}
+            title="showBookedHouse"
+          />
         </Stack>
       </Router>
     );

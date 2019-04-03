@@ -25,26 +25,11 @@ export default class FormSignIn extends Component {
             email: "",
             password: "",
             error: "",
-            showProgress: false,
+            loading: false,
             emailToken: "",
+            hid:'',
         }
         this.onLoginPressed = this.onLoginPressed.bind(this);
-    }
-    componentWillMount() {
-        this.getEmailToken();
-    }
-    async getEmailToken() {
-        try {
-            let emailToken = await AsyncStorage.getItem(EMAIL_TOKEN);
-            if (!emailToken) {
-                //this.redirect('login');
-            } else {
-                this.setState({ emailToken: emailToken })
-            }
-        } catch (error) {
-            console.log("Something went wrong");
-            //this.redirect('login');
-        }
     }
     storeToken(responseData) {
         AsyncStorage.setItem(ACCESS_TOKEN, responseData, (err) => {
@@ -57,20 +42,9 @@ export default class FormSignIn extends Component {
             console.log("error is: " + err);
         });
     }
-    storeEmailToken(responseData) {
-        AsyncStorage.setItem(EMAIL_TOKEN, responseData, (err) => {
-            if (err) {
-                console.log("an error");
-                throw err;
-            }
-            console.log("email stored success");
-        }).catch((err) => {
-            console.log("error is: " + err);
-        });
-    }
     async onLoginPressed() {
         const { email, password } = this.state;
-        this.setState({ error: '', showProgress: true });
+        this.setState({ error: '', loading: true });
         try {
             fetch('http://icumbi.tres.rw/api/login', {
                 method: 'POST',
@@ -87,35 +61,43 @@ export default class FormSignIn extends Component {
                 .then((responseData) => {
                     "POST Response",
                         "Response Body -> " + JSON.stringify(responseData),
-                        console.log(responseData);
-                    // deviceStorage.saveKey('id_token',responseData.success.token);
-                    // this.props.newJWT(responseData.success.token);
-                    //  this.onRegistrationSucceed(responseData);
-                    let accessToken = responseData.success.token;
-                    
-                    console.log(accessToken);
-                    this.storeToken(accessToken);
-                    this.storeEmailToken(email);
-                    Actions.landingScreen();
+                        console.log("::::::ERRORS:::::::");
+                        if(responseData.error){
+                            console.log("Error msg::"+responseData.error);
+                            this.setState({error:responseData.error+"|Credentials",loading:true});
+                        }else{
+                            let accessToken = responseData.success.token;
+                            console.log(accessToken);
+                            this.storeToken(accessToken);
+                            Actions.detailsLanding();
+                        }
+                   
                 })
 
                 .catch((error) => {
                     console.log(error);
-                    // this.onRegistrationFail();
+                   
                 })
         } catch (error) {
             this.setState({ error: error });
             console.log("error " + error);
-            this.setState({ showProgress: false });
+            this.setState({ loading: false });
         }
 
     };
 
     render() {
-        const { email, password } = this.state;
+       
+        const { email, password,loading,error } = this.state;
         return (
             <View style={styles.container}>
-                <Text style={styles.title}> Your email :{this.state.emailToken}  </Text>
+            {loading ?
+                    <Text style={styles.errorTextStyle}>
+                        {error}
+                    </Text>
+                    :
+                    <Text></Text>
+                }
                 <TextInput
                     style={styles.inputBox}
                     underlineColorAndroid="rgba(0,0,0,0)"
@@ -194,11 +176,17 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: "#333",
     },
-   
+
     heading: {
         fontSize: 30,
         fontWeight: "500",
         color: "#fff",
+    },
+    errorTextStyle: {
+        alignSelf: 'center',
+        color: "#ff6400",
+        fontSize: 18,
+        fontWeight: "500"
     },
 });
 
