@@ -1,153 +1,70 @@
-import React,{Component} from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    ScrollView,
-    Dimension,
-    TouchableOpacity
-} from 'react-native';
-import {Actions} from 'react-native-router-flux';
-import {
-    Container,
-    Header,
-    Title,
-    Content,
-    Footer,
-    FooterTab,
-    Button,
-    Left,
-    Right,
-    Body,
-    Icon  
-} from 'native-base';
-import BodyLanding from './BodyLanding';
-export default class Dashboard extends Component{
-    landingScreen(){
-        Actions.landingScreen();
-    }
-    selectRooms(){
-        Actions.selectRooms();
-    }
-    render(){
-        const clusterFor=["Boys","Girls","Family"];
-        const city= [
-            "Bangalore",
-            "Gurgaon",
-            "Noida",
-            "Pune",
-            "Delhi",
-            "Ghaziabad",
-            "Greater Noida",
-            "Faridabad",
-            "Mumbai",
-            "Navi Mumbai",
-            "Thane",
-            "Hyderabad"
-          ];
-          const cityName=city.map((citys,index)=>(
-              <View key={index} style={styles.city}>
-                <Text style={styles.textStyle}>{citys}</Text>
-              </View>
-          ));
+import React, { Component } from "react";
+import { TouchableOpacity } from 'react-native';
+import { Container, Header, Content, List, ListItem, Text, Left, Body, Title, Item, Input, Right, Icon, Button } from "native-base";
+import { Font } from 'expo';
+import Districts from '../Districts';
+import { Ionicons } from '@expo/vector-icons';
+import { Actions } from "react-native-router-flux";
 
-          const rentFor=clusterFor.map((clusters,index)=>(
-                <TouchableOpacity key={index} onPress={this.forgot}>
-                <View style={styles.city}>
-                <Text style={styles.textStyle}>{clusters}</Text>
-                </View>
+export default class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      task: null,
+      tasks: [],
+      districts: [],
+    };
+  }
+  async componentDidMount() {
+    await Font.loadAsync({
+      'Roboto': require('native-base/Fonts/Roboto.ttf'),
+      'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+      ...Ionicons.font,
+    });
+
+    this.timer = setInterval(() => this.getTasks(), 1000);
+  }
+  async getTasks() {
+    return fetch("http://icumbi.tres.rw/api/provinces")
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({
+          tasks: responseJson.data,
+
+        }, function () {
+          //commentcl
+        });
+      })
+      .catch(error => {
+        null;
+      });
+  }
+
+  render() {
+    return (
+      <Container>
+        <Header>
+          <Body>
+            <Title>List of provinces</Title>
+          </Body>
+        </Header>
+        <List
+          dataArray={this.state.tasks}
+          renderRow={item => (
+            <ListItem>
+
+              <Left>
+                <TouchableOpacity onPress={() => { Actions.districts({ id: item.id }); }}>
+                  <Text>{item.name}</Text>
                 </TouchableOpacity>
-          ));
-        return(
-            <Container>
-                <Header>
-                    <Left/>
-                    <Body>
-                        <Title style={styles.titleMain}>Dashboard</Title>
-                    </Body>
-                    <Right/>
-                </Header>
-                <Content>
-                    <View style={styles.Container}>
-                    <ScrollView pagingEnabled={true}>
-                        <View>
-                            <Text style={styles.headerStyle}>Rent Homes In</Text>
-                            <View style={styles.elementsContainer}>{cityName}</View>
-                        </View>
-                        <View>
-                            <View>
-                                <Text style={styles.headerStyle}>Rent Home For</Text>
-                            <View style={styles.elementsContainer}>{rentFor}</View>
-                            </View>
-                        </View>
-                    </ScrollView>
-                    </View>
-                </Content>
-                <Footer>
-                    <FooterTab>
-                        <Button full style={styles.ButtomCont}>
-                        <View>
-                            <TouchableOpacity onPress={this.selectRooms}>
-                            <Text style={styles.applyButton}>Apply</Text>
-                            </TouchableOpacity>
-                        </View>
-                        </Button>
-                    </FooterTab>
-                </Footer>
-            </Container>
-        );
-    }
+              </Left>
+              
+
+            </ListItem>
+          )}
+        />
+
+      </Container>
+    );
+  }
 }
-
-
-var styles = StyleSheet.create({
-    Container: {
-      flex: 1
-    },
-    elementsContainer: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      justifyContent: "center",
-      alignItems: "flex-start"
-    },
-    titleMain: {
-      fontSize: 18,
-      fontWeight: "bold"
-    },
-    headerStyle: {
-      fontSize: 16,
-      textAlign: "center",
-      fontWeight: "bold",
-      marginBottom: 4,
-      paddingVertical: 10
-    },
-    city: {
-      height: 40,
-      width: 170,
-      margin: 5,
-      alignItems: "flex-end",
-      borderRadius: 4,
-      borderWidth: 0.5,
-      borderColor: "#32B76C",
-      paddingRight: 10
-    },
-    selected: {
-      backgroundColor: "#32B76C"
-    },
-    textStyle: {
-      paddingTop: 16,
-      color: "#000"
-    },
-    ButtomCont: {
-      flexDirection: "row",
-      backgroundColor: "#32B76C",
-      justifyContent: "center",
-      alignItems: "center",
-      height: 50
-    },
-    applyButton: {
-      color: "#fff",
-      fontSize: 22
-    }
-  });
-  

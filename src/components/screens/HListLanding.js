@@ -23,13 +23,20 @@ export default class HListLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Housedata: this.props.todo
+      Housedata: {}
     };
   }
   selectRooms() {
     Actions.selectRooms();
   }
   render() {
+    var objCopy = {};
+    let key;
+
+    for (key in this.props.todo) {
+      objCopy[key] = this.props.todo[key];
+    }
+    this.setState({ Housedata: objCopy });
     return (
       <View style={styles.container}>
         <FlatList
@@ -37,30 +44,22 @@ export default class HListLanding extends Component {
           data={this.state.Housedata}
           renderItem={({ item: rowData }) => {
             return (
-
               <Card title={null} image={{ url: rowData.photos.source }}>
                 {/* <CardItem> */}
-
-              
                 <TouchableOpacity onPress={this.selectRooms}>
                   <CardItem cardBody>
                     <Image
                       style={{ height: 150, width: 250, flex: 1 }}
-
                       source={{ uri: rowData.photos.source }}
-
-//                       source={rowData.imageUrl}
                       {...this.props}
                     />
                   </CardItem>
                 </TouchableOpacity>
-
                 {/* </CardItem> */}
-
               </Card>
             );
           }}
-           keyExtractor={item => item.title}
+          keyExtractor={item => item.title}
         />
       </View>
     );

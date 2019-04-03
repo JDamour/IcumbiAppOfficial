@@ -41,12 +41,14 @@ export default class LandingScreen extends Component {
     return (
       <Container style={styles.containerBg}>
         <SelectRoomsHeader />
+
         <BodyLanding id={id}/>
         {this.state.isLoggenIn?
         <FooterBar />
         :
         <Text></Text>
         }
+
       </Container>
     );
   }

@@ -3,6 +3,7 @@ import { Router, Stack, Scene } from "react-native-router-flux";
 
 import Signin from "./components/auth/auth-pages/Signin";
 import Signup from "./components/auth/auth-pages//Signup";
+import Districts from "./components/Districts";
 import Forgot from "./components/auth/auth-pages//Forgot";
 import Dashboard from "./components/screens/Dashboard";
 import LandingScreen from "./components/screens/LandingScreen";
@@ -19,13 +20,13 @@ export default class Routes extends Component {
     return (
       <Router>
         <Stack key="root" hideNavBar={true}>
-        
           <Scene key="dashboard" component={Dashboard} title="Dashboard" />
           <Scene
             key="selectRooms"
             component={SelectRooms}
             title="SelectRooms"
           />
+          
           <Scene
             key="landingScreen"
             component={LandingScreen}
@@ -42,7 +43,11 @@ export default class Routes extends Component {
             key="signin"
             component={Signin}
             title="Signin"
-            // initial={true}
+          />
+          <Scene
+            key="districts"
+            component={Districts}
+            title="Districts"
           />
           <Scene key="signup" component={Signup} title="Register" />
           <Scene key="forgot" component={Forgot} title="Forgot Password" />
@@ -76,33 +81,3 @@ export default class Routes extends Component {
     );
   }
 }
-
-//       <Router>
-//         <Stack key="root" hideNavBar={true}>
-        
-//           <Scene key="dashboard" component={Dashboard} title="Dashboard" />
-//           <Scene
-//             key="dashboard"
-//             component={Dashboard}
-//             title="Dashboard"
-//             initial={true}
-//           />
-//           <Scene
-//             key="landingScreen"
-//             component={LandingScreen}
-//             title="LandingScreen"
-//           />
-          
-//           <Scene key="clusterMap" component={ClusterMap} title="clusterMap" />
-//           <Scene
-//             key="searchFilter"
-//             component={SearchFilter}
-//             title="searchFilter"
-//           />
-//           <Scene key="signin" component={Signin} title="Signin" />
-//           <Scene key="signup" component={Signup} title="Register" />
-//           <Scene key="forgot" component={Forgot} title="Forgot Password" />
-
-//         </Stack>
-//       </Router>
-

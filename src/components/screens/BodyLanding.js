@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import {
   Content,
   Card,
@@ -10,7 +9,9 @@ import {
   Button,
   Icon
 } from "native-base";
+ 
 import { StyleSheet, Text, FlatList, View, AsyncStorage } from "react-native";
+ 
 import HListLanding from "./HListLanding";
 import { Actions } from "react-native-router-flux";
 
@@ -18,8 +19,6 @@ const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
 const ACCESS_TOKEN = 'access_token';
 const HOUSE_TOKEN = 'house_id';
 export default class BodyLanding extends Component {
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -50,7 +49,7 @@ export default class BodyLanding extends Component {
     fetch(`http://icumbi.tres.rw/api/houses/show/${this.state.hid}`)
       .then(response => response.json())
       .then(responseJson => {
-        var objCopy = {}; // objCopy will store a copy of the mainObj
+        var objCopy = {}; // objCopy will store a copy of the mainOb
         let key;
 
         for (key in responseJson) {
@@ -73,12 +72,14 @@ export default class BodyLanding extends Component {
           this.state.todo.province +
           "::district:" +
           this.state.todo.district);
+
       })
       .catch(error => {
         console.log(error);
       })
       .done();
   }
+
   goBack() {
     Actions.pop();
   }
@@ -154,6 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold"
   },
+
   hScroll: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -174,5 +176,4 @@ const styles = StyleSheet.create({
   toLogin: {
     marginTop: 10
   }
-
 });
