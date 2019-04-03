@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+ 
 import { TouchableOpacity, StyleSheet, ActivityIndicator, View } from "react-native";
 import {
   Container, Header, Content, List, ListItem, Text,
@@ -6,6 +7,7 @@ import {
 } from "native-base";
 import { Font } from "expo";
 import Districts from "../Districts";
+ 
 import { Ionicons } from "@expo/vector-icons";
 import { Actions } from "react-native-router-flux";
 import PostList from "../posts/PostList";
@@ -16,8 +18,10 @@ export default class Dashboard extends Component {
     this.state = {
       task: null,
       tasks: [],
+ 
       districts: [],
       loader: true
+ 
     };
   }
   componentWillMount() {
@@ -57,11 +61,11 @@ export default class Dashboard extends Component {
   render() {
     return (
       <Container>
-        <Header>
+        <Header style={styles.head}>
           <Body>
             <Title>List of provinces</Title>
           </Body>
-        </Header>
+        </Header> 
         <View>
           {this.state.loader ? (
             <ActivityIndicator style={styles.load} size="large" color="blue"/>
@@ -83,10 +87,12 @@ export default class Dashboard extends Component {
             />
           )}
         </View>
+ 
       </Container>
     );
   }
 }
+ 
 const styles = StyleSheet.create({
   Opacity: {
     flex:1,
@@ -100,4 +106,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     color:"blue"
   },
+ 
 });

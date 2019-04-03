@@ -5,7 +5,8 @@ import {
   View,
   FlatList,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
 import {
@@ -16,20 +17,20 @@ import {
   Icon,
   Left,
   Body,
-  Right
+  Right,
+  Spinner
 } from "native-base";
 import { Actions } from "react-native-router-flux";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import BodyLanding from "./BodyLanding";
 
 export default class VListLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       data: this.data,
       houses: [],
-      id: this.props.id,
-      loader: true,
+      id: this.props.id, 
+      loader: true, 
     };
   }
   componentWillMount() {
@@ -41,6 +42,12 @@ export default class VListLanding extends Component {
   }
   async componentDidMount() {
     this.timer = setInterval(() => this.getHouses(), 1000);
+    this.setState({
+      loading: false,
+      function() {
+        // In this block you can do something with new state.
+      }
+    });
   }
 
   async getHouses() {
@@ -61,7 +68,8 @@ export default class VListLanding extends Component {
         "POST Response",
           "Response Body -> " + JSON.stringify(responseJson),
           this.setState({
-            houses: responseJson.data
+            houses: responseJson.data,
+            count: responseJson.meta.count
           });
       })
       .catch(error => {
@@ -77,6 +85,7 @@ export default class VListLanding extends Component {
         <ActivityIndicator style={styles.load} size="large" color="blue"/>
       ) : (
         <FlatList
+ 
         data={this.state.houses}
         renderItem={({ item: rowData }) => {
           return (
@@ -139,13 +148,7 @@ export default class VListLanding extends Component {
       />
         )}
 
-
-
-
-
-
-
-        
+ 
       </View>
     );
   }
@@ -156,6 +159,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10
   },
+ 
   horiScroll: {
     borderRadius: 5,
     backgroundColor: "red"
@@ -166,6 +170,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     color:"blue"
   },
+ 
   subTitle: {
     fontSize: 12,
     color: "#32B76C",
@@ -175,12 +180,6 @@ const styles = StyleSheet.create({
   titleSecond: {
     fontSize: 16,
     fontWeight: "bold"
-  },
-  price: {
-    fontSize: 16,
-    fontWeight: "bold",
-    margin: 0,
-    padding: 0
   },
   place: {
     fontSize: 16,

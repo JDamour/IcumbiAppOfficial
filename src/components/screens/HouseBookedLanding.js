@@ -3,9 +3,10 @@ import { Container, Header } from "native-base";
 import { StyleSheet,Text,AsyncStorage} from "react-native";
 import SelectRoomsHeader from "./SelectRoomHeader";
 import BodyLanding from "./BodyLanding";
+import BookedHousesList from "./BookedHousesList";
 import FooterBar from "./FooterBar";
 const ACCESS_TOKEN = 'access_token';
-export default class LandingScreen extends Component {
+export default class HouseBookedListLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,18 +38,11 @@ export default class LandingScreen extends Component {
     }
   }
   render() {
-    const id = this.props.id;
     return (
       <Container style={styles.containerBg}>
         <SelectRoomsHeader />
-
-        <BodyLanding id={id}/>
-        {this.state.isLoggenIn?
-        <FooterBar />
-        :
-        <Text></Text>
-        }
-
+        <BookedHousesList/>
+        <FooterBar/>
       </Container>
     );
   }
