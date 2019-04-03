@@ -14,13 +14,13 @@ export default class MapHeader extends Component {
   }
   render() {
     return (
-      <Header>
+      <Header style={styles.head}>
         <Left>
           <Button transparent onPress={this.goBack}>
             <Ionicons
               name="ios-arrow-back"
               size={22}
-              color="#32B76C"
+              color="#fff"
               onPress={this.goBack}
             />
           </Button>
@@ -33,7 +33,7 @@ export default class MapHeader extends Component {
             <Icon
               name="map-marker"
               size={22}
-              color="#32B76C"
+              color="red"
               onPress={this.clusterMap}
             />
           </Button>
@@ -43,4 +43,8 @@ export default class MapHeader extends Component {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  head: {
+    backgroundColor: "#20d2bb"
+  }
+});

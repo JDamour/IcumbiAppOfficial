@@ -5,7 +5,8 @@ import {
   View,
   FlatList,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
 import {
@@ -16,24 +17,31 @@ import {
   Icon,
   Left,
   Body,
-  Right
+  Right,
+  Spinner
 } from "native-base";
 import { Actions } from "react-native-router-flux";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import BodyLanding from "./BodyLanding";
 
 export default class VListLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       data: this.data,
       houses: [],
-      id: this.props.id
+      id: this.props.id,
+      count: 0
     };
   }
 
   async componentDidMount() {
     this.timer = setInterval(() => this.getHouses(), 1000);
+    this.setState({
+      loading: false,
+      function() {
+        // In this block you can do something with new state.
+      }
+    });
   }
 
   async getHouses() {
@@ -54,7 +62,8 @@ export default class VListLanding extends Component {
         "POST Response",
           "Response Body -> " + JSON.stringify(responseJson),
           this.setState({
-            houses: responseJson.data
+            houses: responseJson.data,
+            count: responseJson.meta.count
           });
       })
       .catch(error => {
@@ -70,23 +79,23 @@ export default class VListLanding extends Component {
           renderItem={({ item: rowData }) => {
             return (
               <Card title={null} image={{ uri: rowData.photos[0].source }}>
-                <CardItem>
-                  <Left>
-                    <Thumbnail
-                      source={{ uri: rowData.photos[0].source }}
-                      {...this.props}
-                    />
-                    <Body>
-                      <Text style={styles.titleSecond}>Available rooms</Text>
-                      <Text style={styles.subTitle}>EXPLORE HOMES</Text>
-                    </Body>
-                  </Left>
-                </CardItem>
                 <TouchableOpacity
                   onPress={() => {
                     Actions.landingScreen({ id: rowData.id });
                   }}
                 >
+                  <CardItem>
+                    <Left>
+                      <Thumbnail
+                        source={{ uri: rowData.photos[0].source }}
+                        {...this.props}
+                      />
+                      <Body>
+                        <Text style={styles.titleSecond}>Available rooms</Text>
+                        <Text style={styles.subTitle}>EXPLORE HOMES</Text>
+                      </Body>
+                    </Left>
+                  </CardItem>
                   <CardItem cardBody>
                     <Image
                       style={{ height: 150, width: null, flex: 1 }}
@@ -94,33 +103,26 @@ export default class VListLanding extends Component {
                       {...this.props}
                     />
                   </CardItem>
-                </TouchableOpacity>
 
-                <CardItem>
-                  <Left>
-                    <Body>
-                      <Text style={styles.place}>{rowData.district}</Text>
-                      <Text style={styles.bhk}> {rowData.rooms} Rooms </Text>
-                    </Body>
-                  </Left>
-                </CardItem>
-                <CardItem style={styles.place}>
-                  <Left>
-                    <Button transparent>
-                      <Icon active name="thumbs-up" />
-                      <Text>{rowData.views} Views</Text>
-                    </Button>
-                  </Left>
-                  <Body>
-                    <Button transparent>
-                      <Icon active name="chatbubbles" />
-                      <Text>1 Comments</Text>
-                    </Button>
-                  </Body>
-                  <Right>
-                    <Text>1 Week ago</Text>
-                  </Right>
-                </CardItem>
+                  <CardItem>
+                    <Left>
+                      <Body>
+                        <Text style={styles.place}>{rowData.district}</Text>
+                        <Text style={styles.bhk}> {rowData.rooms} Rooms </Text>
+                      </Body>
+                    </Left>
+                    <Right>
+                      <Button transparent>
+                        <Icon
+                          active
+                          name="thumbs-up"
+                          style={{ fontSize: 20, color: "#32B76C" }}
+                        />
+                        <Text>{rowData.views} Views</Text>
+                      </Button>
+                    </Right>
+                  </CardItem>
+                </TouchableOpacity>
               </Card>
             );
           }}
@@ -136,11 +138,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10
   },
-  horiScroll: {
-    borderRadius: 5,
-    backgroundColor: "red"
-  },
-
   subTitle: {
     fontSize: 12,
     color: "#32B76C",
@@ -150,12 +147,6 @@ const styles = StyleSheet.create({
   titleSecond: {
     fontSize: 16,
     fontWeight: "bold"
-  },
-  price: {
-    fontSize: 16,
-    fontWeight: "bold",
-    margin: 0,
-    padding: 0
   },
   place: {
     fontSize: 16,

@@ -9,10 +9,17 @@ import {
   Button,
   Icon
 } from "native-base";
- 
-import { StyleSheet, Text, FlatList, View, AsyncStorage } from "react-native";
- 
-import HListLanding from "./HListLanding";
+
+import {
+  StyleSheet,
+  Text,
+  FlatList,
+  View,
+  TouchableOpacity,
+  Image
+} from "react-native";
+const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
+
 import { Actions } from "react-native-router-flux";
 
 const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
@@ -110,7 +117,28 @@ export default class BodyLanding extends Component {
           <View>
             <Text style={styles.titleSecond}> House details</Text>
           </View>
-          {/* <HListLanding todo={todo} /> */}
+          <FlatList
+            horizontal
+            data={todo.photos}
+            renderItem={({ item: rowData }) => {
+              return (
+                <Card title={null} image={{ url: rowData.source }}>
+                  {/* <CardItem> */}
+                  <TouchableOpacity>
+                    <CardItem cardBody>
+                      <Image
+                        style={{ height: 150, width: 250, flex: 1 }}
+                        source={{ uri: rowData.source }}
+                        {...this.props}
+                      />
+                    </CardItem>
+                  </TouchableOpacity>
+                  {/* </CardItem> */}
+                </Card>
+              );
+            }}
+            keyExtractor={item => item.id.toString()}
+          />
         </View>
 
         <Card>
