@@ -1,27 +1,10 @@
 import React, { Component } from "react";
 import {
-  TouchableOpacity,
-  View,
-  FlatList,
-  ScrollView,
-  StyleSheet
+  TouchableOpacity, View,FlatList, ScrollView, StyleSheet, ActivityIndicator
 } from "react-native";
 import {
-  Container,
-  Header,
-  Content,
-  Index,
-  List,
-  ListItem,
-  Text,
-  Left,
-  Body,
-  Title,
-  Item,
-  Input,
-  Right,
-  Icon,
-  Button
+  Container, Header, Content, Index, List, ListItem,
+  Text, Left, Body, Title, Item, Input, Right, Icon, Button
 } from "native-base";
 import { Font } from "expo";
 import { Ionicons } from "@expo/vector-icons";
@@ -34,8 +17,16 @@ export default class Districts extends Component {
       prov: null,
       provinces: {},
       c_tasks: [],
-      dis: {}
+      dis: {},
+      loader: true,
     };
+  }
+  componentWillMount() {
+    setTimeout(()=>{
+      this.setState({
+        loader: false
+      })
+    }, 3000)
   }
   async componentDidMount() {
     await Font.loadAsync({
@@ -47,7 +38,7 @@ export default class Districts extends Component {
     this.timer = setInterval(() => this.getProvinces(), 1000);
   }
   async getProvinces() {
-    fetch(`http://192.168.1.135:8000/api/province/${this.state.pid}`)
+    fetch(`http://192.168.1.143:8000/api/province/${this.state.pid}`)
       .then(response => response.json())
       .then(responseJson => {
         var objCopy = {};
@@ -65,33 +56,52 @@ export default class Districts extends Component {
   }
   render() {
     const { provinces } = this.state;
+    const { dis } = this.state;
     return (
       <View style={styles.container}>
-        <Text style={styles.h2text}>List of districts in {provinces.name}</Text>
-        <List>
-          <ScrollView>
+        
+        
+        <View>
+          {this.state.loader ? (
+            <ActivityIndicator style={styles.load} size="large" color="blue"/>
+          ) : (
             <View>
-              <ListItem>
-                <Text style={styles.pro} />
-              </ListItem>
-              {typeof provinces.districts == "object" ? (
+            <Text style={styles.h2text}>List of districts in {provinces.name}</Text>
+            <List>
+              <ScrollView>
                 <View>
-                  {provinces.districts.map(dis => (
-                    <ListItem key={dis.id}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          Actions.selectRooms({ id: dis.id });
-                        }}
-                      >
-                        <Text style={styles.dis}>{" " + dis.name}</Text>
-                      </TouchableOpacity>
-                    </ListItem>
-                  ))}
+                  <ListItem>
+                    <Text style={styles.pro} />
+                  </ListItem>
+                  {typeof provinces.districts == "object" ? (
+                    <View>
+                      {provinces.districts.map((dis, k) => (
+                        <View>
+                          
+                            <ListItem>
+                            <TouchableOpacity
+                            onPress={()=>{
+                              Actions.selectRooms({id:dis.id});
+                            }}
+                            >
+                              <Text style={styles.dis}>{" " + dis.name}</Text>
+                              </TouchableOpacity>
+                            </ListItem>
+                        </View>
+                      ))}
+                    </View>
+                  ) : null}
                 </View>
-              ) : null}
-            </View>
-          </ScrollView>
-        </List>
+              </ScrollView>
+            </List>
+                      
+          </View>
+          )}
+        </View>
+        
+        
+        
+        
       </View>
     );
   }
@@ -111,17 +121,23 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     color: "green",
-    width: 450
+    width: 450,
   },
   flatview: {
     justifyContent: "center",
     paddingTop: 30,
     borderRadius: 2
   },
+  load:{
+    flex:1,
+    justifyContent:"center",
+    alignItems: "center",
+    color:"blue"
+  },
   dis: {
     fontSize: 22,
     alignItems: "center",
-    width: 400
+    width: 400,
   },
   pro: {
     color: "red",

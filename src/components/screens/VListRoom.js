@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {
   Text,
-  StyleSheet,
+  StyleSheet, ActivityIndicator,
   View,
   FlatList,
   Image,
@@ -28,10 +28,17 @@ export default class VListLanding extends Component {
     this.state = {
       data: this.data,
       houses: [],
-      id: this.props.id
+      id: this.props.id,
+      loader: true,
     };
   }
-
+  componentWillMount() {
+    setTimeout(()=>{
+      this.setState({
+        loader: false
+      })
+    }, 3000)
+  }
   async componentDidMount() {
     this.timer = setInterval(() => this.getHouses(), 1000);
   }
@@ -65,67 +72,80 @@ export default class VListLanding extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <FlatList
-          data={this.state.houses}
-          renderItem={({ item: rowData }) => {
-            return (
-              <Card title={null} image={{ uri: rowData.photos[0].source }}>
-                <CardItem>
-                  <Left>
-                    <Thumbnail
-                      source={{ uri: rowData.photos[0].source }}
-                      {...this.props}
-                    />
-                    <Body>
-                      <Text style={styles.titleSecond}>Available rooms</Text>
-                      <Text style={styles.subTitle}>EXPLORE HOMES</Text>
-                    </Body>
-                  </Left>
-                </CardItem>
-                <TouchableOpacity
-                  onPress={() => {
-                    Actions.landingScreen({ id: rowData.id });
-                  }}
-                >
-                  <CardItem cardBody>
-                    <Image
-                      style={{ height: 150, width: null, flex: 1 }}
-                      source={{ uri: rowData.photos[0].source }}
-                      {...this.props}
-                    />
-                  </CardItem>
-                </TouchableOpacity>
 
-                <CardItem>
-                  <Left>
-                    <Body>
-                      <Text style={styles.place}>{rowData.district}</Text>
-                      <Text style={styles.bhk}> {rowData.rooms} Rooms </Text>
-                    </Body>
-                  </Left>
-                </CardItem>
-                <CardItem style={styles.place}>
-                  <Left>
-                    <Button transparent>
-                      <Icon active name="thumbs-up" />
-                      <Text>{rowData.views} Views</Text>
-                    </Button>
-                  </Left>
+      {this.state.loader ? (
+        <ActivityIndicator style={styles.load} size="large" color="blue"/>
+      ) : (
+        <FlatList
+        data={this.state.houses}
+        renderItem={({ item: rowData }) => {
+          return (
+            <Card title={null} image={{ uri: rowData.photos[0].source }}>
+              <CardItem>
+                <Left>
+                  <Thumbnail
+                    source={{ uri: rowData.photos[0].source }}
+                    {...this.props}
+                  />
                   <Body>
-                    <Button transparent>
-                      <Icon active name="chatbubbles" />
-                      <Text>1 Comments</Text>
-                    </Button>
+                    <Text style={styles.titleSecond}>Available rooms</Text>
+                    <Text style={styles.subTitle}>EXPLORE HOMES</Text>
                   </Body>
-                  <Right>
-                    <Text>1 Week ago</Text>
-                  </Right>
+                </Left>
+              </CardItem>
+              <TouchableOpacity
+                onPress={() => {
+                  Actions.landingScreen({ id: rowData.id });
+                }}
+              >
+                <CardItem cardBody>
+                  <Image
+                    style={{ height: 150, width: null, flex: 1 }}
+                    source={{ uri: rowData.photos[0].source }}
+                    {...this.props}
+                  />
                 </CardItem>
-              </Card>
-            );
-          }}
-          keyExtractor={item => item.id.toString()}
-        />
+              </TouchableOpacity>
+
+              <CardItem>
+                <Left>
+                  <Body>
+                    <Text style={styles.place}>{rowData.district}</Text>
+                    <Text style={styles.bhk}> {rowData.rooms} Rooms </Text>
+                  </Body>
+                </Left>
+              </CardItem>
+              <CardItem style={styles.place}>
+                <Left>
+                  <Button transparent>
+                    <Icon active name="thumbs-up" />
+                    <Text>{rowData.views} Views</Text>
+                  </Button>
+                </Left>
+                <Body>
+                  <Button transparent>
+                    <Icon active name="chatbubbles" />
+                    <Text>1 Comments</Text>
+                  </Button>
+                </Body>
+                <Right>
+                  <Text>1 Week ago</Text>
+                </Right>
+              </CardItem>
+            </Card>
+          );
+        }}
+        keyExtractor={item => item.id.toString()}
+      />
+        )}
+
+
+
+
+
+
+
+        
       </View>
     );
   }
@@ -140,7 +160,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "red"
   },
-
+  load:{
+    flex:1,
+    justifyContent:"center",
+    alignItems: "center",
+    color:"blue"
+  },
   subTitle: {
     fontSize: 12,
     color: "#32B76C",

@@ -1,10 +1,14 @@
 import React, { Component } from "react";
-import { TouchableOpacity } from 'react-native';
-import { Container, Header, Content, List, ListItem, Text, Left, Body, Title, Item, Input, Right, Icon, Button } from "native-base";
-import { Font } from 'expo';
-import Districts from '../Districts';
-import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity, StyleSheet, ActivityIndicator, View } from "react-native";
+import {
+  Container, Header, Content, List, ListItem, Text,
+  Left, Body, Title, Item, Input, Right, Icon, Button
+} from "native-base";
+import { Font } from "expo";
+import Districts from "../Districts";
+import { Ionicons } from "@expo/vector-icons";
 import { Actions } from "react-native-router-flux";
+import PostList from "../posts/PostList";
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -13,13 +17,21 @@ export default class Dashboard extends Component {
       task: null,
       tasks: [],
       districts: [],
+      loader: true
     };
+  }
+  componentWillMount() {
+    setTimeout(()=>{
+      this.setState({
+        loader: false
+      })
+    }, 3000)
   }
   async componentDidMount() {
     await Font.loadAsync({
-      'Roboto': require('native-base/Fonts/Roboto.ttf'),
-      'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-      ...Ionicons.font,
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+      ...Ionicons.font
     });
 
     this.timer = setInterval(() => this.getTasks(), 1000);
@@ -28,12 +40,14 @@ export default class Dashboard extends Component {
     return fetch("http://icumbi.tres.rw/api/provinces")
       .then(response => response.json())
       .then(responseJson => {
-        this.setState({
-          tasks: responseJson.data,
-
-        }, function () {
-          //commentcl
-        });
+        this.setState(
+          {
+            tasks: responseJson.data
+          },
+          function() {
+            //commentcl
+          }
+        );
       })
       .catch(error => {
         null;
@@ -48,23 +62,42 @@ export default class Dashboard extends Component {
             <Title>List of provinces</Title>
           </Body>
         </Header>
-        <List
-          dataArray={this.state.tasks}
-          renderRow={item => (
-            <ListItem>
-
-              <Left>
-                <TouchableOpacity onPress={() => { Actions.districts({ id: item.id }); }}>
-                  <Text>{item.name}</Text>
-                </TouchableOpacity>
-              </Left>
-              
-
-            </ListItem>
+        <View>
+          {this.state.loader ? (
+            <ActivityIndicator style={styles.load} size="large" color="blue"/>
+          ) : (
+            <List
+              dataArray={this.state.tasks}
+              renderRow={item => (
+                <ListItem>
+                  <TouchableOpacity
+                    style={styles.Opacity}
+                    onPress={() => {
+                      Actions.districts({ id: item.id });
+                    }}
+                  >
+                    <Text>{item.name}</Text>
+                  </TouchableOpacity>
+                </ListItem>
+              )}
+            />
           )}
-        />
-
+        </View>
       </Container>
     );
   }
 }
+const styles = StyleSheet.create({
+  Opacity: {
+    flex:1,
+    fontSize: 23,
+    width: 500,
+    margin: 5
+  },
+  load:{
+    flex:1,
+    justifyContent:"center",
+    alignItems: "center",
+    color:"blue"
+  },
+});
