@@ -2,8 +2,18 @@ import React, { Component } from "react";
 import { Button, Footer, FooterTab } from "native-base";
 import { Text, StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import{Actions} from 'react-native-router-flux';
 
 export default class FooterBar extends Component {
+ home=()=>{
+   Actions.dashboard();
+ }
+   selectRooms(){
+    Actions.selectRooms();
+   }
+   profile(){
+     Actions.profile();
+   }
   render() {
     return (
       <Footer>
@@ -23,6 +33,7 @@ export default class FooterBar extends Component {
           <Button>
             <Text>Contact</Text>#32B76C
             <Ionicons name="md-contacts" size={22} />
+
           </Button>
         </FooterTab>
       </Footer>

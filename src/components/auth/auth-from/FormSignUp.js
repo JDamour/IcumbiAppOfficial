@@ -6,7 +6,9 @@ import {
     TextInput,
     TouchableOpacity,
     AsyncStorage,
+    ActivityIndicator,
 } from 'react-native';
+import { Actions } from "react-native-router-flux";
 const ACCESS_TOKEN = 'access_token';
 const EMAIL_TOKEN = 'email_token';
 export default class FormSignUp extends Component {
@@ -26,6 +28,7 @@ export default class FormSignUp extends Component {
             showProgress: false,
             loading: false,
             successmsg: '',
+            errorsDisplay: [],
         }
         this.onRegisterPressed = this.onRegisterPressed.bind(this);
     }
@@ -73,12 +76,15 @@ export default class FormSignUp extends Component {
                     // deviceStorage.saveKey('id_token',responseData.success.token);
                     // this.props.newJWT(responseData.success.token);
                     //  this.onRegistrationSucceed(responseData);
+                    if (responseData.error) {
+                        this.displayErrors(responseData.error);
+                    }
                     let accessToken = responseData.success.token;
                     let emailaccessToken = responseData.success.email;
                     console.log(accessToken);
                     this.storeToken(accessToken);
                     this.storeEmailToken(emailaccessToken);
-                    //Actions.login();
+                    Actions.signin();
                     this.setState({ successmsg: 'Successfully registered!!', loading: true });
                 })
 
@@ -93,11 +99,33 @@ export default class FormSignUp extends Component {
         }
 
     };
-
+    displayErrors = errors => {
+        var magicalFunction = (a, ...s) => [...a.slice(s.length - a.length), ...s],
+            errorsList = [
+                ...errors.email,
+                ...errors.firstName,
+                ...errors.lastName,
+                ...errors.password,
+                ...errors.phoneNumber
+            ];
+        const flattenedArray = [].concat(...errorsList);
+        console.log(errors);
+        this.setState({
+            errorsDisplay: flattenedArray
+        });
+    };
     render() {
         const { firstName, lastName, email, password, password_confirmation, phoneNumber, error, loading, showProgress } = this.state;
+        const textInputComponents = this.state.errorsDisplay.map(
+            (element, index) => (
+                <Text style={styles.red} key={index}>
+                    {element}
+                </Text>
+            )
+        );
         return (
             <View style={styles.container}>
+             {textInputComponents}
                 <TextInput
                     style={styles.inputBox}
                     underlineColorAndroid="rgba(0,0,0,0)"
@@ -168,39 +196,36 @@ export default class FormSignUp extends Component {
                 <TouchableOpacity style={styles.button} onPress={this.onRegisterPressed} >
                     <Text style={styles.buttonText}>{this.props.type}</Text>
                 </TouchableOpacity>
-                {this.state.showProgress ?
-                    <Text style={styles.errorTextStyle}>
-                        {this.state.error}
-                    </Text>
-                    :
-                    <Text></Text>
-                }
-                {this.state.showProgress ?
-                    <Text style={styles.successTextStyle}>
-                        {this.state.successmsg}
-                    </Text>
-                    :
-                    <Text></Text>
-                }
                 <Errors errors={this.state.errors} />
+
+                <ActivityIndicator
+                    animating={this.state.showProgress}
+                    size="large"
+                    style={styles.loader}
+                />
             </View>
         );
     }
 }
-const Errors = (props) => {
+const Errors = props => {
     return (
         <View>
-            {props.errors.map((error, i) => <Text key={i} style={styles.error}> {error} </Text>)}
+            {props.errors.map((error, i) => (
+                <Text key={i} style={styles.error}>
+                    {" "}
+                    {error}{" "}
+                </Text>
+            ))}
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop:50,
+        marginTop: 50,
 
     },
 
@@ -238,5 +263,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'white',
         fontWeight: "500"
+    },
+    error: {
+        color: "red",
+        paddingTop: 10
+    },
+    red: {
+        color: "red"
+    },
+    loader: {
+        marginTop: 20
     }
 });

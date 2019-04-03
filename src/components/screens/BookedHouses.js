@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import {
   Content,
   Card,
@@ -9,23 +10,16 @@ import {
   Button,
   Icon
 } from "native-base";
-
-import {
-  StyleSheet,
-  Text,
-  FlatList,
-  View,
-  TouchableOpacity,
-  Image
-} from "react-native";
-const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
-
+import { StyleSheet, Text, FlatList, View, AsyncStorage } from "react-native";
+import HListLanding from "./HListLanding";
 import { Actions } from "react-native-router-flux";
 
 const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
 const ACCESS_TOKEN = 'access_token';
 const HOUSE_TOKEN = 'house_id';
-export default class BodyLanding extends Component {
+export default class BookedHouses extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
@@ -37,63 +31,72 @@ export default class BodyLanding extends Component {
     };
   }
   componentWillMount() {
-      this.showHouse();
+      this.showBookedHouse();
   }
- 
-  storeHouseToken(responseData) {
-    AsyncStorage.setItem(HOUSE_TOKEN, responseData, (err) => {
-        if (err) {
-            console.log("an error");
-            throw err;
-        }
-        console.log("House stored success with house id::"+responseData);
-    }).catch((err) => {
-        console.log("error is: " + err);
-    });
-}
-  showHouse() {
+  async showBookedHouse() {
+    try {
+        var accessToken = await AsyncStorage.getItem(ACCESS_TOKEN);
+        console.log('::Access token show  is available::'+accessToken);
+        var houseToken = await AsyncStorage.getItem(HOUSE_TOKEN);
+
+        console.log('::::House id booked show  is available::::'+houseToken);
+        if (!houseToken && !accessToken) {
+            console.log('Something wrong');
+        } else {
+            console.log("House details you want is here::" + houseToken);
+            fetch(`http://icumbi.tres.rw/api/service/show/${houseToken}`, {
+            method: 'GET',
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Authorization":`Bearer ${accessToken}`,
+            },
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+            "POST Response",
+                "Response Body -> " + JSON.stringify(responseData),
+                console.log("[OBJECT HERE ]"+responseData.status);
+
+           if(responseData.status==404){
+            console.log("SERVICES DESCRIPTION "+responseData.description);
+            // Actions.signin();
+        }else{  
+            // var objCopy = {}; // objCopy will store a copy of the mainObj
+            // let key;
     
-    fetch(`http://icumbi.tres.rw/api/houses/show/${this.state.hid}`)
-      .then(response => response.json())
-      .then(responseJson => {
-        var objCopy = {}; // objCopy will store a copy of the mainOb
-        let key;
-
-        for (key in responseJson) {
-          objCopy[key] = responseJson[key]; // copies each property to the objCopy object
+            // for (key in responseData) {
+            //   objCopy[key] = responseData[key]; // copies each property to the objCopy object
+            // }
+    
+            console.log(
+              "Here We are::::::" +
+              responseData.id +
+              "::" +
+              responseData.house.housePrice +
+              ":::" +
+              responseData.house.houseLocation
+            );
+            // this.setState({ todo: objCopy });
+            // console.log(
+            //   "::STATE OBJECT VALUE::Id:" +
+            //   this.state.todo.id +
+            //   "::Province:" +
+            //   this.state.todo.housePrice +
+            //   "::district:" +
+            //   this.state.todo.houseLocation);
         }
+        })
 
-        console.log(
-          "Here We are::::::" +
-          objCopy.id +
-          "::" +
-          objCopy.province +
-          ":::" +
-          objCopy.district
-        );
-        this.setState({ todo: objCopy });
-        console.log(
-          "::STATE OBJECT VALUE::Id:" +
-          this.state.todo.id +
-          "::Province:" +
-          this.state.todo.province +
-          "::district:" +
-          this.state.todo.district);
-
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .done();
+        .catch((error) => {
+            console.log(error);
+            
+        })
+        }
+    } catch (error) {
+        console.log("Something went wrong");
+    }
   }
-
-  goBack() {
-    Actions.pop();
-  }
-  // login(){
-  //     Actions.signin();
-  // }
-
   render() {
     const { todo } = this.state;
     return (
@@ -101,7 +104,7 @@ export default class BodyLanding extends Component {
         <View>
           <Text style={styles.textContent}>
             {" "}
-            {todo.province} | {todo.district}
+            {todo.id} | {todo.street}
             {"  "}
             <Icon
               onPress={this.goBack}
@@ -117,28 +120,7 @@ export default class BodyLanding extends Component {
           <View>
             <Text style={styles.titleSecond}> House details</Text>
           </View>
-          <FlatList
-            horizontal
-            data={todo.photos}
-            renderItem={({ item: rowData }) => {
-              return (
-                <Card title={null} image={{ url: rowData.source }}>
-                  {/* <CardItem> */}
-                  <TouchableOpacity>
-                    <CardItem cardBody>
-                      <Image
-                        style={{ height: 150, width: 250, flex: 1 }}
-                        source={{ uri: rowData.source }}
-                        {...this.props}
-                      />
-                    </CardItem>
-                  </TouchableOpacity>
-                  {/* </CardItem> */}
-                </Card>
-              );
-            }}
-            keyExtractor={item => item.id.toString()}
-          />
+          {/* <HListLanding todo={todo} /> */}
         </View>
 
         <Card>
@@ -183,7 +165,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold"
   },
-
   hScroll: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -204,4 +185,5 @@ const styles = StyleSheet.create({
   toLogin: {
     marginTop: 10
   }
+
 });
