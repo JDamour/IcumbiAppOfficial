@@ -17,13 +17,13 @@ export default class SelectRoomHeader extends Component {
   }
   render() {
     return (
-      <Header>
+      <Header style={styles.head}>
         <Left>
           <Button transparent onPress={this.goBack}>
             <Ionicons
               name="ios-arrow-back"
               size={22}
-              color="#32B76C"
+              color="#fff"
               onPress={this.goBack}
             />
           </Button>
@@ -36,7 +36,7 @@ export default class SelectRoomHeader extends Component {
             <Icon
               name="map-marker"
               size={22}
-              color="#32B76C"
+              color="red"
               onPress={this.clusterMap}
             />
           </Button>
@@ -44,7 +44,7 @@ export default class SelectRoomHeader extends Component {
             <Icon
               name="filter"
               size={22}
-              color="#32B76C"
+              color="#fff"
               onPress={this.searchFilter}
             />
           </Button>
@@ -54,4 +54,12 @@ export default class SelectRoomHeader extends Component {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  titleMain: {
+    fontSize: 18,
+    fontWeight: "bold"
+  },
+  head: {
+    backgroundColor: "#20d2bb"
+  }
+});
