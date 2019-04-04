@@ -16,12 +16,10 @@ import {
   FlatList,
   View,
   TouchableOpacity,
-  Image
+  Image,
+  AsyncStorage
 } from "react-native";
-const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
-
 import { Actions } from "react-native-router-flux";
-
 const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
 const ACCESS_TOKEN = 'access_token';
 const HOUSE_TOKEN = 'house_id';

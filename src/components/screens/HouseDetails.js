@@ -11,8 +11,6 @@ import {
     Icon
 } from "native-base";
 import { StyleSheet, Text, FlatList, View, AsyncStorage } from "react-native";
-
-import HListLanding from "./HListLanding";
 const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
 
 import { Actions } from "react-native-router-flux";
@@ -156,7 +154,7 @@ export default class HouseDetails extends Component {
                     <View>
                         <Text style={styles.titleSecond}> House details</Text>
                     </View>
-                    {/* <HListLanding todo={todo} /> */}
+                  
                 </View>
 
                 <Card>
@@ -179,7 +177,7 @@ export default class HouseDetails extends Component {
                                 <Button  onPress={() => {
                                    this.BookHouses();
                                 }} style={styles.toLogin}>
-                                    {/* <Icon active name="ios-information-circle-outline" /> */}
+                                   
                                     <Text style={{ color: "white" }}>Book this house</Text>
                                 </Button>
                             </Body>

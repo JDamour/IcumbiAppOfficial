@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import {
   Text,
-  StyleSheet, ActivityIndicator,
+  StyleSheet, 
+  ActivityIndicator,
   View,
   FlatList,
   Image,
   TouchableOpacity,
-  ActivityIndicator
 } from "react-native";
 
 import {

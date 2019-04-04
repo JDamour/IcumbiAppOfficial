@@ -19,7 +19,6 @@ import {
     Right,
     Content
   } from "native-base";
-import HListLanding from "./HListLanding";
 import { Actions } from "react-native-router-flux";
 
 const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
