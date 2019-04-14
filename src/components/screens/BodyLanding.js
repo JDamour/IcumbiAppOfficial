@@ -17,9 +17,12 @@ import {
   View,
   TouchableOpacity,
   Image,
-  AsyncStorage
+  AsyncStorage,
+  TouchableHighlight,
 } from "react-native";
 import { Actions } from "react-native-router-flux";
+import CommonData from '../../CommonData';
+import Loading from 'react-native-whc-loading';
 const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
 const ACCESS_TOKEN = 'access_token';
 const HOUSE_TOKEN = 'house_id';
@@ -36,8 +39,18 @@ export default class BodyLanding extends Component {
   }
   componentWillMount() {
       this.showHouse();
+      this.getLoginToken();
+      console.log(':::WEB URL::'+CommonData);
   }
- 
+  async getLoginToken(){
+    var accessToken = await AsyncStorage.getItem(ACCESS_TOKEN);
+         console.log('::Access token is available::'+accessToken);
+         if (!accessToken) {
+          console.log('Something wrong');
+         }else{
+           this.setState({isLoggenIn:true});
+         }
+  }
   storeHouseToken(responseData) {
     AsyncStorage.setItem(HOUSE_TOKEN, responseData, (err) => {
         if (err) {
@@ -157,9 +170,16 @@ export default class BodyLanding extends Component {
                 <Text style={{ marginTop: 10 }}>Bathroom inside: {todo.bathroom == 1 ? <Text style={{ backgroundColor: "green", color: "white", padding: 5 }}>True</Text> : <Text>False</Text>}</Text>
                 <Text style={{ marginTop: 10 }}>Fenced: {todo.fenced == 1 ? <Text style={{ backgroundColor: "green", color: "white", padding: 5 }}>True</Text> : <Text>False</Text>}</Text>
                 <Button transparent onPress={() => {
-                  console.log("House Id transfered::"+this.state.hid);
-                 this.storeHouseToken(JSON.stringify(this.state.hid));
-                  Actions.signin();
+                  if(this.state.isLoggenIn){
+                    console.log(":::Here we go to book house:::");
+                    console.log("House Id transfered::"+this.state.hid);
+                    this.storeHouseToken(JSON.stringify(this.state.hid));
+                    Actions.detailsLanding();
+                  }else{
+                    console.log("House Id transfered::"+this.state.hid);
+                    this.storeHouseToken(JSON.stringify(this.state.hid));
+                     Actions.signin();
+                  }
                 }} style={styles.toLogin}>
                   <Icon active name="ios-information-circle-outline" />
                   <Text style={{ color: "blue" }}>More details</Text>
@@ -168,6 +188,7 @@ export default class BodyLanding extends Component {
             </Left>
           </CardItem>
         </Card>
+       
       </Content>
     );
   }
@@ -201,5 +222,20 @@ const styles = StyleSheet.create({
   },
   toLogin: {
     marginTop: 10
-  }
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    padding:30,
+},
+button: {
+    height: 50,
+    justifyContent:'center',
+    alignItems:'center',
+},
+text: {
+    color: '#fff',
+    fontSize: 18,
+}
 });

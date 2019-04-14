@@ -77,7 +77,8 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     style={styles.Opacity}
                     onPress={() => {
-                      Actions.districts({ id: item.id });
+                      // Actions.districts({ id: item.id });
+                      Actions.selectRooms({ id: item.id });
                     }}
                   >
                     <Text>{item.name}</Text>

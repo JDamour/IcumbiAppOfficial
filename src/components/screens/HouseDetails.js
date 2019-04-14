@@ -11,6 +11,8 @@ import {
     Icon
 } from "native-base";
 import { StyleSheet, Text, FlatList, View, AsyncStorage } from "react-native";
+import Loading from 'react-native-whc-loading';
+import Spinner from 'react-native-loading-spinner-overlay';
 const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
 
 import { Actions } from "react-native-router-flux";
@@ -22,20 +24,26 @@ export default class HouseDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            Loading: false,
             isLoggenIn: false,
             hid: '',
             logedIn: '',
             todo: {},
             isBooked:false,
-            bookmsg:''
+            bookmsg:'',
+            spinner: false
         };
     }
+   
     componentDidMount() {
+        setTimeout(() => {
+            this.setState({
+              spinner: !this.state.spinner,
+            });
+          }, 6000);
         this.showHouse();
        
     }
-
+    
     async BookHouses(){
         try {
             var accessToken = await AsyncStorage.getItem(ACCESS_TOKEN);
@@ -109,7 +117,7 @@ export default class HouseDetails extends Component {
                             ":::" +
                             objCopy.district
                         );
-                        this.setState({ todo: objCopy });
+                        this.setState({ todo: objCopy,spinner:true });
                         console.log(
                             "::STATE OBJECT VALUE::Id:" +
                             this.state.todo.id +
@@ -135,6 +143,17 @@ export default class HouseDetails extends Component {
         const { todo } = this.state;
         return (
             <Content style={{ marginTop: 10 }}>
+            {this.state.spinner ?(
+           <Spinner
+           visible={this.state.spinner}
+           textContent={'Loading...'}
+           size="large" 
+           color="#0000ff"
+           animation="fade"
+           textStyle={styles.spinnerTextStyle}
+         />
+         ) : (
+        <Content style={{ marginTop: 10 }}>
                 <View>
                     <Text style={styles.textContent}>
                         {" "}
@@ -185,6 +204,9 @@ export default class HouseDetails extends Component {
                     </CardItem>
                 </Card>
             </Content>
+         )}
+           </Content>
+           
         );
     }
 }
@@ -219,6 +241,9 @@ const styles = StyleSheet.create({
         padding:5,
         alignItems:'center',
         justifyContent:'center'
-    }
+    },
+    spinnerTextStyle: {
+        color: '#FFF'
+      },
 
 });

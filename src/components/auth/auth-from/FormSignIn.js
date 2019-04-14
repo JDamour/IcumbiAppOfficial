@@ -129,6 +129,7 @@ export default class FormSignIn extends Component {
                         {this.props.type}
                     </Text>
                 </TouchableHighlight>
+                
             </View>
         );
     }

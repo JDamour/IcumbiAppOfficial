@@ -60,7 +60,7 @@ export default class VListLanding extends Component {
       body: JSON.stringify({
         page: 1,
         size: 5,
-        district: this.state.id
+        // district: this.state.id
       })
     })
       .then(response => response.json())

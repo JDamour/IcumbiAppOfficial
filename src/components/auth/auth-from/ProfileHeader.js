@@ -12,6 +12,7 @@ import {
 } from "native-base";
 import { StyleSheet, Text, FlatList, View, Image, AsyncStorage } from "react-native";
 import { Actions } from "react-native-router-flux";
+import Spinner from 'react-native-loading-spinner-overlay';
 const ACCESS_TOKEN = 'access_token';
 export default class ProfileHeader extends Component {
     constructor(props) {
@@ -26,10 +27,10 @@ export default class ProfileHeader extends Component {
             amount: '',
             email: '',
             details: [],
+            spinner: false
         }
     }
-
-    async componentDidMount() {
+    async showUserProfile() {
         try {
             var accessToken = await AsyncStorage.getItem(ACCESS_TOKEN);
             if (!accessToken) {
@@ -50,13 +51,15 @@ export default class ProfileHeader extends Component {
                             "Response Body -> " + JSON.stringify(responseJson),
                             console.log("JSON RESPONSE HERE:::::" + responseJson.success.email);
                             this.setState({
-                                details:responseJson.success    
+                                details:responseJson.success ,
+                                spinner:true   
                             }); 
                     })
                     .catch((error) => {
                         this.setState({
                             error: 'Error retrieving data',
-                            loading: false
+                            loading: false,
+                            
                         });
                         console.log(error);
                     });
@@ -65,11 +68,29 @@ export default class ProfileHeader extends Component {
             console.log("Something went wrong"+error);
         }
     }
-
+    componentWillMount() {
+        setTimeout(() => {
+            this.setState({
+              spinner: !this.state.spinner,
+            });
+          }, 6000);
+        this.showUserProfile();
+         }
 
     render() {
         const { loading, details, error } = this.state;
         return (
+            <Content style={{ marginTop: 10 }}>
+            {this.state.spinner ?(
+                <Spinner
+                visible={this.state.spinner}
+                textContent={'Loading...'}
+                size="large" 
+                color="#0000ff"
+                animation="fade"
+                textStyle={styles.spinnerTextStyle}
+              />
+              ) : (
             <Content style={{ marginTop: 10 }}>
                 <View>
                     <Text style={styles.textContent}>
@@ -107,6 +128,8 @@ export default class ProfileHeader extends Component {
                     </CardItem>
                 </Card>
             </Content>
+             )}
+             </Content>
         );
     }
 }
@@ -189,6 +212,9 @@ const styles = StyleSheet.create({
     },
     toLogin: {
         marginTop: 10
-    }
+    },
+    spinnerTextStyle: {
+        color: '#FFF'
+      },
 
 });

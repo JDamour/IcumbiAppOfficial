@@ -20,7 +20,7 @@ import {
     Content
   } from "native-base";
 import { Actions } from "react-native-router-flux";
-
+import Spinner from 'react-native-loading-spinner-overlay';
 const API_KEY = "f0cb6490af1043818c8d444d2e70cce7";
 const ACCESS_TOKEN = 'access_token';
 const HOUSE_TOKEN = 'house_id';
@@ -32,10 +32,16 @@ export default class BookedHousesList extends Component {
       isLoggenIn: false,
       logedIn: '',
       houses: [],
+      spinner: false
     };
     this.showListBookedHouse=this.showListBookedHouse.bind(this);
   }
   componentWillMount() {
+    setTimeout(() => {
+      this.setState({
+        spinner: !this.state.spinner,
+      });
+    }, 6000);
       this.showListBookedHouse();
   }
   async showListBookedHouse() {
@@ -63,7 +69,8 @@ export default class BookedHousesList extends Component {
                 "Response Body -> " + JSON.stringify(responseData),
                 console.log("ARRAY DATA"+responseData.data);
                  this.setState({
-                    houses: responseData.data
+                    houses: responseData.data,
+                    spinner:true
                   });
                 })
 
@@ -79,6 +86,17 @@ export default class BookedHousesList extends Component {
   render() {
     const { houses } = this.state;         
     return (
+      <Content style={{ marginTop: 10 }}>
+       {this.state.spinner ?(
+           <Spinner
+           visible={this.state.spinner}
+           textContent={'Loading...'}
+           size="large" 
+           color="#0000ff"
+           animation="fade"
+           textStyle={styles.spinnerTextStyle}
+         />
+         ) : (
         <Content style={{ marginTop: 10 }}>
         <View style={styles.container}>
         <FlatList
@@ -150,6 +168,8 @@ export default class BookedHousesList extends Component {
         />
       </View>
       </Content>
+       )}
+      </Content>
     );
   }
 }
@@ -190,6 +210,9 @@ const styles = StyleSheet.create({
         marginLeft: -15,
         marginTop: 5,
         color: "#32B76C"
-      }
+      },
+      spinnerTextStyle: {
+        color: '#FFF'
+      },
 
 });
