@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import {
-  TouchableOpacity, View,FlatList, ScrollView, StyleSheet
+  TouchableOpacity, View,FlatList, ScrollView, StyleSheet, ActivityIndicator
 } from "react-native";
+ 
 import {
   Container, Header, Content, Index, List, ListItem,
   Text, Left, Body, Title, Item, Input, Right, Icon, Button
 } from "native-base";
+ 
 import { Font } from "expo";
 import { Ionicons } from "@expo/vector-icons";
+import { Actions } from "react-native-router-flux";
 export default class Districts extends Component {
   constructor(props) {
     super(props);
@@ -16,8 +19,17 @@ export default class Districts extends Component {
       prov: null,
       provinces: {},
       c_tasks: [],
-      dis: {}
+      dis: {},
+      loader: true,
+ 
     };
+  }
+  componentWillMount() {
+    setTimeout(()=>{
+      this.setState({
+        loader: false
+      })
+    }, 3000)
   }
   async componentDidMount() {
     await Font.loadAsync({
@@ -26,10 +38,11 @@ export default class Districts extends Component {
       ...Ionicons.font
     });
 
-    this.timer = setInterval(() => this.getProvinces(), 1000);
+    this.timer = setInterval(() => this.getProvinces(), 3000);
   }
+
   async getProvinces() {
-    fetch(`http://192.168.1.123:8000/api/province/${this.state.pid}`)
+    fetch(`http://192.168.1.143:8000/api/province/${this.state.pid}`)
       .then(response => response.json())
       .then(responseJson => {
         var objCopy = {};
@@ -50,30 +63,49 @@ export default class Districts extends Component {
     const { dis } = this.state;
     return (
       <View style={styles.container}>
-        <Text style={styles.h2text}>List of districts in {provinces.name}</Text>
-        <List>
-          <ScrollView>
+ 
+        <View>
+          {this.state.loader ? (
+            <ActivityIndicator style={styles.load} size="large" color="blue"/>
+          ) : (
+ 
             <View>
-              <ListItem>
-                <Text style={styles.pro} />
-              </ListItem>
-              {typeof provinces.districts == "object" ? (
+            <Text style={styles.h2text}>List of districts in {provinces.name}</Text>
+            <List>
+              <ScrollView>
                 <View>
-                  {provinces.districts.map((dis, k) => (
+                  <ListItem>
+                    <Text style={styles.pro} />
+                  </ListItem>
+                  {typeof provinces.districts == "object" ? (
                     <View>
-                      
-                        <ListItem>
-                        <TouchableOpacity>
-                          <Text style={styles.dis}>{" " + dis.name}</Text>
-                          </TouchableOpacity>
-                        </ListItem>
+                      {provinces.districts.map((dis, k) => (
+                        <View>
+                          
+                            <ListItem>
+                            <TouchableOpacity
+                            onPress={()=>{
+                              Actions.selectRooms({id:dis.id});
+                            }}
+                            >
+                              <Text style={styles.dis}>{" " + dis.name}</Text>
+                              </TouchableOpacity>
+                            </ListItem>
+                        </View>
+                      ))}
                     </View>
-                  ))}
+                  ) : null}
                 </View>
-              ) : null}
-            </View>
-          </ScrollView>
-        </List>
+              </ScrollView>
+            </List>
+                      
+          </View>
+          )}
+        </View>
+        
+        
+        
+        
       </View>
     );
   }
@@ -88,17 +120,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FCFF"
   },
   h2text: {
-    marginTop: 10,
+    margin: 10,
     alignItems: "center",
     fontSize: 28,
-    fontWeight: "bold",
+    fontWeight: "bold", 
     color: "green",
-    width: 450,
+    width: 450, 
+  },
+  head: {
+    backgroundColor: "#20d2bb"
   },
   flatview: {
     justifyContent: "center",
     paddingTop: 30,
     borderRadius: 2
+  },
+  load:{
+    flex:1,
+    justifyContent:"center",
+    alignItems: "center",
+    color:"blue"
   },
   dis: {
     fontSize: 22,

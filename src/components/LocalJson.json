@@ -1,0 +1,157 @@
+[
+    {
+    "id": 1,
+    "name": "Amajyaruguru",
+    "districts": [
+    {
+    "id": 1,
+    "name": "Burera"
+    },
+    {
+    "id": 2,
+    "name": "Gakenke"
+    },
+    {
+    "id": 3,
+    "name": "Gicumbi"
+    },
+    {
+    "id": 4,
+    "name": "Musanze"
+    },
+    {
+    "id": 5,
+    "name": "Rulindo"
+    }
+    ],
+    "count": 5
+    },
+    {
+    "id": 2,
+    "name": "Amajyepfo",
+    "districts": [
+    {
+    "id": 6,
+    "name": "Gisagara"
+    },
+    {
+    "id": 7,
+    "name": "Huye"
+    },
+    {
+    "id": 8,
+    "name": "Kamonyi"
+    },
+    {
+    "id": 9,
+    "name": "Muhanga"
+    },
+    {
+    "id": 10,
+    "name": "Nyamagabe"
+    },
+    {
+    "id": 11,
+    "name": "Nyanza"
+    },
+    {
+    "id": 12,
+    "name": "Nyaruguru"
+    },
+    {
+    "id": 13,
+    "name": "Ruhano"
+    }
+    ],
+    "count": 8
+    },
+    {
+    "id": 3,
+    "name": "Iburasirazuba",
+    "districts": [
+    {
+    "id": 14,
+    "name": "Bugesera"
+    },
+    {
+    "id": 15,
+    "name": "Gatsibo"
+    },
+    {
+    "id": 16,
+    "name": "Kayonza"
+    },
+    {
+    "id": 17,
+    "name": "Kirehe"
+    },
+    {
+    "id": 18,
+    "name": "Ngoma"
+    },
+    {
+    "id": 19,
+    "name": "Nyagatare"
+    },
+    {
+    "id": 20,
+    "name": "Rwamagana"
+    }
+    ],
+    "count": 7
+    },
+    {
+    "id": 4,
+    "name": "Uburengerazuba",
+    "districts": [
+    {
+    "id": 21,
+    "name": "Karongi"
+    },
+    {
+    "id": 22,
+    "name": "Ngororero"
+    },
+    {
+    "id": 23,
+    "name": "Nyabihu"
+    },
+    {
+    "id": 24,
+    "name": "Nyamasheke"
+    },
+    {
+    "id": 25,
+    "name": "Rubavu"
+    },
+    {
+    "id": 26,
+    "name": "Rusizi"
+    },
+    {
+    "id": 27,
+    "name": "Rutsiro"
+    }
+    ],
+    "count": 7
+    },
+    {
+    "id": 5,
+    "name": "Kigali",
+    "districts": [
+    {
+    "id": 28,
+    "name": "Gasabo"
+    },
+    {
+    "id": 29,
+    "name": "Kicukiro"
+    },
+    {
+    "id": 30,
+    "name": "Nyarugenge"
+    }
+    ],
+    "count": 3
+    }
+]
