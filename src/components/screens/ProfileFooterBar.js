@@ -64,7 +64,18 @@ export default class ProfileFooterBar extends Component {
 const styles = StyleSheet.create({
     foot: {
       backgroundColor: "#20d2bb",
-      color: "#32B76C"
+      color: "#32B76C",
+    position: 'absolute',
+    flex:0.1,
+    left: 0,
+    right: 0,
+    bottom: -10,
+    // backgroundColor:'green',
+    flexDirection:'row',
+    height:80,
+    alignItems:'center',
+
     }
+
   });
   

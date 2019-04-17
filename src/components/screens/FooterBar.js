@@ -19,16 +19,16 @@ export default class FooterBar extends Component {
       <Footer>
         <FooterTab style={styles.foot}>
         <Button onPress={this.home}>
-            <Text>Home</Text>
-            <Ionicons name="ios-home" size={22}  />
+            <Text style={{color:"white"}}>Home</Text>
+            <Ionicons name="ios-home" size={22} color="white" />
           </Button>
           <Button  onPress={this.selectRooms}>
-            <Text>Houses</Text>
-            <Ionicons name="ios-book" size={22}  />
+            <Text style={{color:"white"}}>Houses</Text>
+            <Ionicons name="ios-book" size={22} color="white"  />
           </Button>
           <Button  onPress={this.profile}>
-            <Text>Profile</Text>
-            <Ionicons name="md-contacts" size={22}  />
+            <Text style={{color:"white"}}>Profile</Text>
+            <Ionicons name="md-contacts" size={22} color="white"  />
           </Button>
         </FooterTab>
       </Footer>
@@ -39,6 +39,9 @@ export default class FooterBar extends Component {
 const styles = StyleSheet.create({
   foot: {
     backgroundColor: "#20d2bb",
-    color: "#32B76C"
+    // color: "#32B76C",
+    flex: 1,
+    // justifyContent: "center",
+    // alignItems: "center",
   }
 });
