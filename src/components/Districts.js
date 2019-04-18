@@ -1,35 +1,28 @@
-import React, { Component } from "react";
-import {
-  TouchableOpacity,
-  View,
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  ActivityIndicator
-} from "react-native";
-import {
-  Container,
-  Header,
-  List,
-  ListItem,
-  Text,
-  Body,
-  Title,
-} from "native-base";
+
+
 import FooterBar from "./screens/FooterBar";
-// import ProfileFooterBar from "./screens/ProfileFooterBar";
+import React, { Component } from "react";
+import { TouchableOpacity, View, FlatList, ScrollView, StyleSheet, Text, TextInput,Slider,ActivityIndicator } from "react-native";
+import { Container, Header, Content, Index, List, ListItem, Left, Body, Title, Item, Right, Icon, Button, Row } from "native-base";
+import createReactContext from 'create-react-context'; 
 import { Font } from "expo";
 import { Ionicons } from "@expo/vector-icons";
+import Modal from "react-native-simple-modal";
 import { Actions } from "react-native-router-flux";
+
 export default class Districts extends Component {
   constructor(props) {
     super(props);
     this.state = {
       pid: this.props.id,
       prov: null,
+      tableHead: ['', '', ''],
       provinces: {},
       c_tasks: [],
       dis: {},
+      from: 10000,
+      up_to: 180000,
+      value: 50,
       loader: true
     };
   }
@@ -40,6 +33,28 @@ export default class Districts extends Component {
       });
     }, 5000);
   }
+  state = { open: false };
+  modalDidOpen = () => console.log("Modal did open.");
+  modalDidClose = () => {
+    this.setState({ open: false });
+    console.log("Modal did close.");
+  }
+  handleFrom = () => {
+    this.setState({ from: 10 })
+  }
+  handleup_to = () => {
+    this.setState({ up_to:10 })
+  }
+  apply = (from, up_to) => {
+     alert('from: ' + from + '\n up to: ' + up_to)
+  }
+ enableScroll = () => this.setState({ scrollEnabled: true });
+ disableScroll = () => this.setState({ scrollEnabled: false });
+    
+  moveUp = () => this.setState({ offset: -100 });
+  resetPosition = () => this.setState({ offset: 0 });
+  openModal = () => this.setState({ open: true });
+  closeModal = () => this.setState({ open: false });
   async componentDidMount() {
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
@@ -68,6 +83,9 @@ export default class Districts extends Component {
         null;
       });
   }
+  getVal(val){
+    console.warn(val);
+    }
   render() {
     const { provinces } = this.state;
     const { dis } = this.state;
@@ -93,22 +111,82 @@ export default class Districts extends Component {
                       <View>
                         {provinces.districts.map((dis) => (
                           <View>
-                            <ListItem>
-                              <TouchableOpacity
-                                onPress={() => {
-                                  Actions.selectRooms({ id: dis.id });
-                                }}
-                              >
-                                <Text style={styles.dis}>{" " + dis.name}</Text>
-                              </TouchableOpacity>
-                            </ListItem>
-                          </View>
+                          <ListItem>
+                            <TouchableOpacity onPress={this.openModal}>
+                              <Text style={styles.dis}>{" " + dis.name}</Text>
+                            </TouchableOpacity>
+                          </ListItem>
+                        </View>
                         ))}
                       </View>
                     ) : null}
                   </View>
                 </ScrollView>
               </List>
+              <Modal
+          offset={this.state.offset}
+          open={this.state.open}
+          modalDidOpen={this.modalDidOpen}
+          modalDidClose={this.modalDidClose}
+          style={{ alignItems: "center" }}
+        >
+          <View style={{height: 250, width: 260,alignItems:'center'}}>
+          <Text style={{ fontSize: 20, marginBottom: 10,textAlign:"center"}}>Range of prices</Text>
+        {/* <View style={styles.containerr}> */}
+        <Slider
+         style={{ width: 300 }}
+         step={1}
+         minimumValue={10000}
+         maximumValue={90000}
+         value={this.state.from}
+         onValueChange={val => this.setState({ from: val })}
+         onSlidingComplete={ val => this.getVal(val)}
+        />
+        <Text style={styles.welcome}>
+          From : {this.state.from}
+        </Text> 
+        <Slider
+         style={{ width: 300 }}
+         step={1}
+         minimumValue={this.state.from}
+         maximumValue={180000}
+         value={this.state.up_to}
+         onValueChange={val => this.setState({ up_to: val })}
+         onSlidingComplete={ val => this.getVal(val)}
+        />
+        <Text style={styles.instructions}>
+         Up to : {this.state.up_to}
+        </Text> 
+      {/* </View> */}
+      <View  style={styles.forpopup}>
+            <TouchableOpacity
+              style={styles.submitButton}
+              // onPress={
+              //   () => this.apply(this.state.from, this.state.up_to) }
+              onPress={()=>{
+                Actions.selectRooms({id:dis.id, up_to:this.state.up_to, from:this.state.up_to});
+              }}
+              >
+              <Text style={styles.submitButtonText}> OK </Text>
+            </TouchableOpacity>
+            </View>
+
+      <View style={styles.row}>
+           <TouchableOpacity style={{ margin: 25 }} onPress={this.moveUp}>
+              <Text>Up</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ margin: 25 }}
+              onPress={this.resetPosition}
+            >
+              <Text>Down </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ margin: 25}} onPress={this.closeModal}>
+              <Text>Close</Text>
+            </TouchableOpacity>
+           </View>
+          </View>
+        </Modal>
             </View>
           )}
         </View>
@@ -159,5 +237,59 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 5
-  }
+  },
+  input: {
+    margin: 15,
+    height: 40,
+    width: 80,
+    borderColor: '#7a42f4',
+    borderWidth: 2
+  },
+  submitButton: {
+    backgroundColor: '#7a42f4',
+    padding: 10,
+    marginTop: 15,
+    height: 40,
+    width: 80,
+    alignItems: "center",
+ },
+ submitButtonText:{
+    color: 'white'
+ },
+ row: {
+  flex: 1,
+  flexDirection: "row",
+  marginBottom:-10,
+  alignItems: 'center',
+  justifyContent:'center'
+
+},
+inputWrap: {
+  flex: 1,
+  marginBottom: 10,
+  flexDirection: "row",
+},
+forpopup: {
+  flex: 1,
+  marginBottom: 10,
+  justifyContent:'center'
+},
+containerr: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#F5FCFF',
+},
+welcome: {
+  fontSize: 15,
+  textAlign: 'center',
+  margin: 10,
+},
+instructions: {
+  textAlign: 'center',
+  //color: '#333333',
+  fontSize: 15,
+  marginBottom: 5,
+},
+  
 });
