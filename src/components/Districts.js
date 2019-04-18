@@ -1,13 +1,23 @@
 import React, { Component } from "react";
 import {
-  TouchableOpacity, View,FlatList, ScrollView, StyleSheet, ActivityIndicator
+  TouchableOpacity,
+  View,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator
 } from "react-native";
- 
 import {
-  Container, Header, Content, Index, List, ListItem,
-  Text, Left, Body, Title, Item, Input, Right, Icon, Button
+  Container,
+  Header,
+  List,
+  ListItem,
+  Text,
+  Body,
+  Title,
 } from "native-base";
- 
+import FooterBar from "./screens/FooterBar";
+// import ProfileFooterBar from "./screens/ProfileFooterBar";
 import { Font } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import { Actions } from "react-native-router-flux";
@@ -20,16 +30,15 @@ export default class Districts extends Component {
       provinces: {},
       c_tasks: [],
       dis: {},
-      loader: true,
- 
+      loader: true
     };
   }
   componentWillMount() {
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setState({
         loader: false
-      })
-    }, 3000)
+      });
+    }, 5000);
   }
   async componentDidMount() {
     await Font.loadAsync({
@@ -42,7 +51,8 @@ export default class Districts extends Component {
   }
 
   async getProvinces() {
-    fetch(`http://192.168.1.143:8000/api/province/${this.state.pid}`)
+    // fetch(`http://192.168.1.129:8000/api/province/${this.state.pid}`)
+    fetch(`https://icumbi.tres.rw/api/province/${this.state.pid}`)
       .then(response => response.json())
       .then(responseJson => {
         var objCopy = {};
@@ -62,59 +72,56 @@ export default class Districts extends Component {
     const { provinces } = this.state;
     const { dis } = this.state;
     return (
-      <View style={styles.container}>
- 
-        <View>
+      <Container>
+        <View style={styles.container}>
           {this.state.loader ? (
-            <ActivityIndicator style={styles.load} size="large" color="blue"/>
+            <ActivityIndicator style={styles.load} size="large" color="#20d2bb" />
           ) : (
- 
             <View>
-            <Text style={styles.h2text}>List of districts in {provinces.name}</Text>
-            <List>
-              <ScrollView>
-                <View>
-                  <ListItem>
-                    <Text style={styles.pro} />
-                  </ListItem>
-                  {typeof provinces.districts == "object" ? (
-                    <View>
-                      {provinces.districts.map((dis, k) => (
-                        <View>
-                          
+              <Header style={styles.head}>
+                <Body>
+                    <Title> List of districts in {provinces.name}</Title>
+                </Body>
+              </Header>
+              <List>
+                <ScrollView>
+                  <View>
+                    <ListItem>
+                      <Text style={styles.pro} />
+                    </ListItem>
+                    {typeof provinces.districts == "object" ? (
+                      <View>
+                        {provinces.districts.map((dis) => (
+                          <View>
                             <ListItem>
-                            <TouchableOpacity
-                            onPress={()=>{
-                              Actions.selectRooms({id:dis.id});
-                            }}
-                            >
-                              <Text style={styles.dis}>{" " + dis.name}</Text>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  Actions.selectRooms({ id: dis.id });
+                                }}
+                              >
+                                <Text style={styles.dis}>{" " + dis.name}</Text>
                               </TouchableOpacity>
                             </ListItem>
-                        </View>
-                      ))}
-                    </View>
-                  ) : null}
-                </View>
-              </ScrollView>
-            </List>
-                      
-          </View>
+                          </View>
+                        ))}
+                      </View>
+                    ) : null}
+                  </View>
+                </ScrollView>
+              </List>
+            </View>
           )}
         </View>
-        
-        
-        
-        
-      </View>
+        <FooterBar />
+      </Container>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginTop: 50,
+    flex: 5,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5FCFF"
@@ -123,9 +130,9 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: "center",
     fontSize: 28,
-    fontWeight: "bold", 
+    fontWeight: "bold",
     color: "green",
-    width: 450, 
+    width: 450
   },
   head: {
     backgroundColor: "#20d2bb"
@@ -135,19 +142,22 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     borderRadius: 2
   },
-  load:{
-    flex:1,
-    justifyContent:"center",
+  load: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    color:"blue"
+    color: "blue"
   },
   dis: {
     fontSize: 22,
     alignItems: "center",
-    width: 400,
+    width: 400
   },
   pro: {
     color: "red",
     alignItems: "center"
+  },
+  body: {
+    flex: 5
   }
 });

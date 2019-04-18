@@ -3,14 +3,15 @@ import React, { Component } from "react";
 import { TouchableOpacity, StyleSheet, ActivityIndicator, View } from "react-native";
 import {
   Container, Header, Content, List, ListItem, Text,
-  Left, Body, Title, Item, Input, Right, Icon, Button
+  Left, Body, Title, Item, Input, Right, Icon, Button, Footer, FooterTab 
 } from "native-base";
 import { Font } from "expo";
-import Districts from "../Districts";
+import ProfileFooterBar from "./ProfileFooterBar";
  
 import { Ionicons } from "@expo/vector-icons";
 import { Actions } from "react-native-router-flux";
-import PostList from "../posts/PostList";
+import FooterBar from "./FooterBar";
+// import PostList from "../posts/PostList";
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -41,7 +42,9 @@ export default class Dashboard extends Component {
     this.timer = setInterval(() => this.getTasks(), 1000);
   }
   async getTasks() {
-    return fetch("http://icumbi.tres.rw/api/provinces")
+    var url="http://icumbi.tres.rw/api/provinces"
+    // var url=require('../posts/db.json');
+    return fetch(url)
       .then(response => response.json())
       .then(responseJson => {
         this.setState(
@@ -66,9 +69,9 @@ export default class Dashboard extends Component {
             <Title>List of provinces</Title>
           </Body>
         </Header> 
-        <View>
+        <View style={styles.body}>
           {this.state.loader ? (
-            <ActivityIndicator style={styles.load} size="large" color="blue"/>
+            <ActivityIndicator style={styles.load} size="large" color="#20d2bb"/>
           ) : (
             <List
               dataArray={this.state.tasks}
@@ -87,7 +90,7 @@ export default class Dashboard extends Component {
             />
           )}
         </View>
- 
+        <FooterBar/>
       </Container>
     );
   }
@@ -102,9 +105,14 @@ const styles = StyleSheet.create({
   },
   load:{
     flex:1,
-    justifyContent:"center",
+    justifyContent:"space-around",
     alignItems: "center",
     color:"blue"
   },
- 
+  head: {
+    backgroundColor: "#20d2bb"
+  },
+ body: {
+  flex: 5
+ }
 });
