@@ -1,10 +1,5 @@
 import React, { Component } from "react";
 import { Text, StyleSheet, View } from "react-native";
-import {
-  Container, Header, Content, List, ListItem,
-  Left, Body, Title, Item, Input, Right, Icon, Button, Footer, FooterTab 
-} from "native-base";
-import FooterBar from "./FooterBar";
 import HeaderBar from "./HeaderBar";
 import VListRoom from "./VListRoom";
 import Search from "./Search";
@@ -16,14 +11,16 @@ export default class SelectRooms extends Component {
   }
   render() {
     const id = this.props.id;
+    const up_to = this.props.up_to;
+    const from = this.props.from;
+    console.log("GUHERA::::"+up_to);
+    console.log("KUGEZA::::"+from);
     return (
-      <Container style={styles.container}>
+      <View style={styles.container}>
         <HeaderBar />
         <Search />
-        <VListRoom id={id} />
-        
-        <FooterBar/>
-      </Container>
+        <VListRoom id={id} up_to={up_to} from={from}/>
+      </View>
     );
   }
 }

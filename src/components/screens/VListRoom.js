@@ -30,6 +30,8 @@ export default class VListLanding extends Component {
       data: this.data,
       houses: [],
       id: this.props.id, 
+      up_to: this.props.up_to, 
+      // from: this.props.from, 
       loader: true, 
     };
   }
@@ -60,7 +62,9 @@ export default class VListLanding extends Component {
       body: JSON.stringify({
         page: 1,
         size: 5,
-        district: this.state.id
+        district: this.state.id,
+        startPrice: 1000,
+        endPrice: this.state.up_to
       })
     })
       .then(response => response.json())
@@ -78,11 +82,14 @@ export default class VListLanding extends Component {
   }
 
   render() {
+    
+    console.log("GUHERA_List::::"+this.state.up_to);
+    console.log("KUGEZA_List::::"+this.state.from);
     return (
       <View style={styles.container}>
 
       {this.state.loader ? (
-        <ActivityIndicator style={styles.load} size="large" color="#20d2bb"/>
+        <ActivityIndicator style={styles.load} size="large" color="blue"/>
       ) : (
         <FlatList
  
@@ -120,16 +127,25 @@ export default class VListLanding extends Component {
                 <Left>
                   <Body>
                     <Text style={styles.place}>{rowData.district}</Text>
-                    <Text style={styles.bhk}>{rowData.rooms} Rooms </Text>
+                    <Text style={styles.bhk}> {rowData.rooms} Rooms </Text>
                   </Body>
                 </Left>
-                <Right>
+              </CardItem>
+              <CardItem style={styles.place}>
+                <Left>
                   <Button transparent>
-                  <Body>
-                    <Icon active name="eye"  style={{fontSize: 20, color: '#000'}}/>
-                    <Text style={styles.bhk}>   {rowData.views} Views</Text>
-                    </Body>
+                    <Icon active name="thumbs-up" />
+                    <Text>{rowData.views} Views</Text>
                   </Button>
+                </Left>
+                <Body>
+                  <Button transparent>
+                    <Icon active name="chatbubbles" />
+                    <Text>1 Comments</Text>
+                  </Button>
+                </Body>
+                <Right>
+                  <Text>1 Week ago</Text>
                 </Right>
               </CardItem>
             </Card>
