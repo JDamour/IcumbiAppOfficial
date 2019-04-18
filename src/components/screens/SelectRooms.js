@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import { Text, StyleSheet, View } from "react-native";
+import {
+  Container, Header, Content, List, ListItem,
+  Left, Body, Title, Item, Input, Right, Icon, Button, Footer, FooterTab 
+} from "native-base";
+import FooterBar from "./FooterBar";
 import HeaderBar from "./HeaderBar";
 import VListRoom from "./VListRoom";
 import Search from "./Search";
@@ -12,11 +17,13 @@ export default class SelectRooms extends Component {
   render() {
     const id = this.props.id;
     return (
-      <View style={styles.container}>
+      <Container style={styles.container}>
         <HeaderBar />
         <Search />
         <VListRoom id={id} />
-      </View>
+        
+        <FooterBar/>
+      </Container>
     );
   }
 }

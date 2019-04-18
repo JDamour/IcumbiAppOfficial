@@ -89,8 +89,8 @@ export default class App extends React.Component {
 }
 const styles = StyleSheet.create({
   image: {
-    width: 200,
-    height: 200
+    width: 400,
+    height: 600
   },
   text: {
     color: "#000000",
@@ -112,11 +112,12 @@ const styles = StyleSheet.create({
 const slides = [
   {
     key: "s1",
-    text: "Best Way To Find Rentel Home",
-    title: "welcome Home",
+    text: "ICUMBI App is the Best Way To Find You Dream Home",
+    title: "Welcome to ICUMBI Mobile App ",
     titleStyle: styles.title,
     textStyle: styles.text,
-    image: require("./src/assets/images/step1.png"),
+    // image: require("./src/assets/images/step1.png"),
+    image: require("./src/assets/images/2.jpg"),
     imageStyle: styles.image,
     backgroundColor: "#20d2bb"
   },
@@ -126,7 +127,8 @@ const slides = [
     titleStyle: styles.title,
     textStyle: styles.text,
     text: "Near By Option To Find Home",
-    image: require("./src/assets/images/step2.png"),
+    // image: require("./src/assets/images/step2.png"),
+    image: require("./src/assets/images/1.jpg"),
     imageStyle: styles.image,
     backgroundColor: "#febe29"
   },
@@ -136,7 +138,8 @@ const slides = [
     titleStyle: styles.title,
     textStyle: styles.text,
     text: "Overall possible Home Visit",
-    image: require("./src/assets/images/step3.png"),
+    // image: require("./src/assets/images/step3.png"),
+    image: require("./src/assets/images/3.jpg"),
     imageStyle: styles.image,
     backgroundColor: "#22bcb5"
   },
@@ -146,7 +149,8 @@ const slides = [
     titleStyle: styles.title,
     textStyle: styles.text,
     text: "Enjoy the great offer",
-    image: require("./src/assets/images/step4.png"),
+    // image: require("./src/assets/images/step4.png"),
+    image: require("./src/assets/images/7.jpeg"),
     imageStyle: styles.image,
     backgroundColor: "#40739e"
   },
@@ -156,7 +160,8 @@ const slides = [
     titleStyle: styles.title,
     textStyle: styles.text,
     text: "Enjoy Refral Bonus",
-    image: require("./src/assets/images/step5.png"),
+    // image: require("./src/assets/images/step5.png"),
+    image: require("./src/assets/images/5.jpg"),
     imageStyle: styles.image,
     backgroundColor: "#60a3bc"
   },
@@ -166,8 +171,10 @@ const slides = [
     titleStyle: styles.title,
     textStyle: styles.text,
     text: " All Amenities Available",
-    image: require("./src/assets/images/step6.png"),
+    // image: require("./src/assets/images/step6.png"),
+    image: require("./src/assets/images/6.jpg"),
     imageStyle: styles.image,
-    backgroundColor: "#febe29"
+    backgroundColor: "#febe29",
+
   }
 ];
